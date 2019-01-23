@@ -55,6 +55,8 @@ table(data.combined@meta.data$orig.ident)
 #                               new.data = I_obj, 
 #                               add.cell.id = 'I' ) # works if it's data
 
+# add more samples
+print('Adding samples...')
 for (i in 1:length(identifier)) {
   data.combined <- AddSamples(object = data.combined, 
                               new.data = eval(parse (text = paste0(identifier[i], '_data' ) ) ), 
