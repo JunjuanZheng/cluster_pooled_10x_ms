@@ -30,16 +30,16 @@ for (i in 1:length(list.filenames)){
   
   # import data
   data <- Read10X(data.dir = paste0(args[1], '/', list.filenames[i], '/mm10/') )
-  #seuObj <- CreateSeuratObject(raw.data = data, project = identifier[i], min.cells = 3, min.genes = 200)
+  seuObj <- CreateSeuratObject(data, project = identifier[i], min.cells = 3, min.features = 200)
 
   # replace name with identifier
   assign(paste0(identifier[i],'_data'), data)
-  #assign(paste0(identifier[i],'_obj'), seuObj)
+  assign(paste0(identifier[i],'_obj'), seuObj)
 }
 
 # combine data
 print('Combining data...')
-data.combined <- MergeSeurat(object1 = eval(parse(text = paste0(identifier[1], '_obj' ) ) ), 
+data.combined <- merge(object1 = eval(parse(text = paste0(identifier[1], '_obj' ) ) ), 
                              object2 = eval(parse(text = paste0(identifier[2], '_obj' ) ) ),
                              add.cell.id1 = paste0(identifier[1], '_obj' ), 
                              add.cell.id2 = paste0(identifier[2], '_obj' ), project = "all")
