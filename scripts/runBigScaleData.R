@@ -72,10 +72,27 @@ for (i in 1:length(identifier)) {
 head(x = data.combined@cell.names)
 table(data.combined@meta.data$orig.ident)
 
+data.combined.noNorm.noScale <- data.combined
+
+# Normalize Data
+print('Normalizing data...')
+data.combined <- NormalizeData(object = data.combined, normalization.method = "LogNormalize", 
+    scale.factor = 10000)
+
+data.combined.normOnly <- data.combined # so you can save intermediate variable
+
+# Scale Data
+print('Scaling data...')
+data.combined <- ScaleData(object = data.combined, vars.to.regress = c("nUMI"))
+
+data.combined.normAndScale <- data.combined
 
 # export output to file
 print('Saving data...')
 setwd(args[2])
-save(data.combined, file= 'data_combined.RData')
+save(data.combined.noNorm.noScale, file= 'data_combined_noNorm_noScale.RData')
+save(data.combined.normOnly, file='data_combined_normOnly.RData')
+save(data.combined.normAndScale, file='data_combined_normAndScale.RData')
 
+# Notify user that script is finished
 print('~*~All finished!~*~')
