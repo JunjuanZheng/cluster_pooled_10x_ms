@@ -3,7 +3,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=4
-#SBATCH --mem=64G
+#SBATCH --mem=128G
 #SBATCH --partition=interactive
 #SBATCH --job-name=R_CMD
 #SBATCH --time=7-00:00:00
