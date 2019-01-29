@@ -4,8 +4,12 @@
 
 # Load needed library
 #install.packages('Seurat')
-library('Seurat')
+
+
+# Load older version of Seurat which has the functions I need
+library('Seurat', lib.loc='/scg/apps/software/r/3.5.0/scg/seurat_2.3')
 packageVersion('Seurat')
+
 
 # info about this session
 #print(sessionInfo())
@@ -13,6 +17,7 @@ packageVersion('Seurat')
 # import from command line
 args <- commandArgs(TRUE)
 #load(args[1])
+print(paste0('Output location: ', args[2]))
 
 # get file names
 list.filenames <- list.files(args[1])
@@ -30,7 +35,7 @@ for (i in 1:length(list.filenames)){
   
   # import data
   data <- Read10X(data.dir = paste0(args[1], '/', list.filenames[i], '/mm10/') )
-  seuObj <- CreateSeuratObject(data, project = identifier[i], min.cells = 3, min.features = 200)
+  seuObj <- CreateSeuratObject(raw.data = data, project = identifier[i], min.cells = 3, min.genes = 200)
 
   # replace name with identifier
   assign(paste0(identifier[i],'_data'), data)
@@ -39,7 +44,7 @@ for (i in 1:length(list.filenames)){
 
 # combine data
 print('Combining data...')
-data.combined <- merge(object1 = eval(parse(text = paste0(identifier[1], '_obj' ) ) ), 
+data.combined <- MergeSeurat(object1 = eval(parse(text = paste0(identifier[1], '_obj' ) ) ), 
                              object2 = eval(parse(text = paste0(identifier[2], '_obj' ) ) ),
                              add.cell.id1 = paste0(identifier[1], '_obj' ), 
                              add.cell.id2 = paste0(identifier[2], '_obj' ), project = "all")
@@ -69,4 +74,8 @@ table(data.combined@meta.data$orig.ident)
 
 
 # export output to file
+print('Saving data...')
+setwd(args[2])
 save(data.combined, file= 'data_combined.RData')
+
+print('~*~All finished!~*~')
