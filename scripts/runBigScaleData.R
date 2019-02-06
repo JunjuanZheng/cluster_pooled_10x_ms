@@ -49,30 +49,42 @@ data.combined <- MergeSeurat(object1 = eval(parse(text = paste0(identifier[1], '
                              add.cell.id1 = paste0(identifier[1], '_obj' ), 
                              add.cell.id2 = paste0(identifier[2], '_obj' ), project = "all")
 
-# notice the cell names now have an added identifier
+## notice the cell names now have an added identifier
 head(x = data.combined@cell.names)
 table(data.combined@meta.data$orig.ident)
 
-# Append that data to existing seurat object
-# # ## M
-# 
-# data.combined <- AddSamples(object = data.combined, 
-#                               new.data = I_obj, 
-#                               add.cell.id = 'I' ) # works if it's data
-
-# add more samples
+# use mergeSeurat iteratively to build data.combined
 print('Adding samples...')
 for (i in 1:length(identifier)) {
-  data.combined <- AddSamples(object = data.combined, 
-                              new.data = eval(parse (text = paste0(identifier[i], '_data' ) ) ), 
-                              add.cell.id = paste0(identifier[i], '_data' ) )
+  data.combined <- MergeSeurat(data.combined,
+                       eval(parse(text = paste0(identifier[i], '_obj' ) ) ),
+                       add.cell.id2 = paste0(identifier[i], '_obj' ),
+                       project = "all")
 }
 
-# notice the cell names now have an added identifier
+## notice the cell names now have an added identifier
 head(x = data.combined@cell.names)
 table(data.combined@meta.data$orig.ident)
 
-data.combined.noNorm.noScale <- data.combined
+data.combined.noNorm.noScale <- data.combined # so you can save this later as an intermediate variable
+
+
+
+# Import metadata using cell names from data.combined
+print('Importing metadata...')
+metadata <- read.csv(args[3])
+
+myCells <- data.frame(cellNames = data.combined@cell.names)
+myCells$Identity <- data.combined@meta.data$orig.ident
+metadataCols <- c('SampleID','CellsPerSample','SurgeryDate','Condition', 'Genotype', 'Litter')
+
+myMetadata <- merge(myCells, metadata[,metadataCols], by.x='Identity', by.y='SampleID')
+rownames(myMetadata) <- myMetadata$cellNames
+
+## add my metadata to Seurat object
+data.combined <- AddMetaData(data.combined, myMetadata[,-c(1:2)], col.name = metadataCols[-c(1:2)])
+
+
 
 # Normalize Data
 print('Normalizing data...')
@@ -81,11 +93,24 @@ data.combined <- NormalizeData(object = data.combined, normalization.method = "L
 
 data.combined.normOnly <- data.combined # so you can save intermediate variable
 
+
+# Detect variable genes across cells
+print('Identifying genes with highest variability...')
+## export plot
+setwd(args[2])
+png()
+data.combined <- FindVariableGenes(object = data.combined, mean.function = ExpMean, dispersion.function = LogVMR, x.low.cutoff = 0.0125, x.high.cutoff = 3, y.cutoff = 0.5)
+dev.off()
+
+hv.genes <- head(rownames(data.combined@hvg.info), 1000) # only take top 1000 variable genes
+
+
 # Scale Data
 print('Scaling data...')
-data.combined <- ScaleData(object = data.combined, vars.to.regress = c("nUMI"))
+data.combined <- ScaleData(object = data.combined, genes.use = hv.genes, vars.to.regress = c("nUMI"), do.par = TRUE)
 
 data.combined.normAndScale <- data.combined
+
 
 # export output to file
 print('Saving data...')
@@ -93,6 +118,8 @@ setwd(args[2])
 save(data.combined.noNorm.noScale, file= 'data_combined_noNorm_noScale.RData')
 save(data.combined.normOnly, file='data_combined_normOnly.RData')
 save(data.combined.normAndScale, file='data_combined_normAndScale.RData')
+save(c(metadata, myMetadata), file='metadataFiles.RData')
+save(hv.genes, file='hv_genes.RData')
 
 # Notify user that script is finished
 print('~*~All finished!~*~')

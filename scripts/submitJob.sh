@@ -10,6 +10,6 @@
 
 module purge
 module load r/3.5.0
-Rscript runBigScaleData.R $MTX_16p_SC_MS $OUTPUT_16p/201901_cluster_pooled_10x_ms
+Rscript runBigScaleData.R $MTX_16p_SC_MS $OUTPUT_16p/201901_cluster_pooled_10x_ms/20190206
 
 #source("20190121_runBigScaleData.R", echo=TRUE, max.deparse.length=10000)
