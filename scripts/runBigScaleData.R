@@ -55,7 +55,7 @@ table(data.combined@meta.data$orig.ident)
 
 # use mergeSeurat iteratively to build data.combined
 print('Adding samples...')
-for (i in 1:length(identifier)) {
+for (i in 3:length(identifier)) {
   data.combined <- MergeSeurat(data.combined,
                        eval(parse(text = paste0(identifier[i], '_obj' ) ) ),
                        add.cell.id2 = paste0(identifier[i], '_obj' ),
@@ -98,7 +98,7 @@ data.combined.normOnly <- data.combined # so you can save intermediate variable
 print('Identifying genes with highest variability...')
 ## export plot
 setwd(args[2])
-png()
+svg( filename = "findVariableGenes.svg" )
 data.combined <- FindVariableGenes(object = data.combined, mean.function = ExpMean, dispersion.function = LogVMR, x.low.cutoff = 0.0125, x.high.cutoff = 3, y.cutoff = 0.5)
 dev.off()
 
@@ -118,7 +118,7 @@ setwd(args[2])
 save(data.combined.noNorm.noScale, file= 'data_combined_noNorm_noScale.RData')
 save(data.combined.normOnly, file='data_combined_normOnly.RData')
 save(data.combined.normAndScale, file='data_combined_normAndScale.RData')
-save(c(metadata, myMetadata), file='metadataFiles.RData')
+save(metadata, myMetadata, file='metadataFiles.RData')
 save(hv.genes, file='hv_genes.RData')
 
 # Notify user that script is finished

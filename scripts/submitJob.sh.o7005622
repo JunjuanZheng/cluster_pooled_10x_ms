@@ -1,0 +1,124 @@
+[1] ‘2.3.4’
+[1] "Loading needed files..."
+[1] "Running PCAs..."
+[1] "PC1"
+[1] "Mllt11" "Tubb3"  "Rtn1"   "Crmp1"  "Stmn3" 
+[1] ""
+[1] "Anp32b" "Hes1"   "Dbi"    "Ccnd2"  "Hmgb2" 
+[1] ""
+[1] ""
+[1] "PC2"
+[1] "Ckb"   "Hmgb3" "Lhx2"  "Pkm"   "Meis2"
+[1] ""
+[1] "Bgn"    "Col3a1" "Igf2"   "Emp3"   "Col1a2"
+[1] ""
+[1] ""
+[1] "PC3"
+[1] "Eef1a1"   "Rpl37"    "Rps11"    "Rps14"    "Hsp90ab1"
+[1] ""
+[1] "Hba-a2" "Hbb-bt" "Alas2"  "Hba-a1" "Hbb-bs"
+[1] ""
+[1] ""
+[1] "PC4"
+[1] "Ccnb1"  "Nusap1" "Ube2c"  "Plk1"   "Aurka" 
+[1] ""
+[1] "Lcp1"   "Tgfb1"  "Smagp"  "Gimap6" "Gmfg"  
+[1] ""
+[1] ""
+[1] "PC5"
+[1] "Sstr2" "Eomes" "Igsf8" "Nrp1"  "Mfng" 
+[1] ""
+[1] "Mif"    "Sepw1"  "Ly6h"   "Ldha"   "Pcsk1n"
+[1] ""
+[1] ""
+[1] "PC6"
+[1] "Mfap4"   "Gadd45g" "Eomes"   "Sstr2"   "Rcor2"  
+[1] ""
+[1] "Tubb2a" "Ncam1"  "Nrxn3"  "Gad2"   "Dlx2"  
+[1] ""
+[1] ""
+[1] "PC7"
+[1] "Otx2"  "Sulf1" "Clic6" "Rspo2" "Folr1"
+[1] ""
+[1] "Meis2" "Epha5" "Sfrp1" "Ptn"   "Lmo1" 
+[1] ""
+[1] ""
+[1] "PC8"
+[1] "Esam"   "Emcn"   "Igfbp7" "Cldn5"  "Eng"   
+[1] ""
+[1] "Tyrobp" "Fcer1g" "C1qb"   "Rac2"   "C1qc"  
+[1] ""
+[1] ""
+[1] "PC9"
+[1] "Nfib"  "Cdh13" "Wnt7b" "Sox5"  "Nfia" 
+[1] ""
+[1] "Nrxn3"   "Dlx5"    "Dlx6os1" "Sp9"     "Dlx2"   
+[1] ""
+[1] ""
+[1] "PC10"
+[1] "Lhx1os" "Lhx5"   "Reln"   "Lhx1"   "Trp73" 
+[1] ""
+[1] "Ttr"    "Calml4" "Sulf1"  "Clic6"  "Trpm3" 
+[1] ""
+[1] ""
+[1] "Plotting PCAs..."
+[1] "PC1"
+[1] "Mllt11" "Tubb3"  "Rtn1"   "Crmp1"  "Stmn3" 
+[1] ""
+[1] "Anp32b" "Hes1"   "Dbi"    "Ccnd2"  "Hmgb2" 
+[1] ""
+[1] ""
+[1] "PC2"
+[1] "Ckb"   "Hmgb3" "Lhx2"  "Pkm"   "Meis2"
+[1] ""
+[1] "Bgn"    "Col3a1" "Igf2"   "Emp3"   "Col1a2"
+[1] ""
+[1] ""
+[1] "PC3"
+[1] "Eef1a1"   "Rpl37"    "Rps11"    "Rps14"    "Hsp90ab1"
+[1] ""
+[1] "Hba-a2" "Hbb-bt" "Alas2"  "Hba-a1" "Hbb-bs"
+[1] ""
+[1] ""
+[1] "PC4"
+[1] "Ccnb1"  "Nusap1" "Ube2c"  "Plk1"   "Aurka" 
+[1] ""
+[1] "Lcp1"   "Tgfb1"  "Smagp"  "Gimap6" "Gmfg"  
+[1] ""
+[1] ""
+[1] "PC5"
+[1] "Sstr2" "Eomes" "Igsf8" "Nrp1"  "Mfng" 
+[1] ""
+[1] "Mif"    "Sepw1"  "Ly6h"   "Ldha"   "Pcsk1n"
+[1] ""
+[1] ""
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+[1] "Generating PCA plots for various possible batch effects..."
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+[1] "Generating Dendrograms for various possible batch effects..."
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
+null device 
+          1 
