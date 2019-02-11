@@ -11,7 +11,8 @@ packageVersion('Seurat')
 # load needed files
 print('Loading needed files...')
 args <- commandArgs(TRUE) # load in arguments that accompanied script
-setwd(args[1])
+mainDir <- args[1]
+setwd(mainDir)
 setwd('RData')
 load('data_combined_pca.RData') # load combined data
 load('metadataFiles.RData') # load combined data
@@ -22,7 +23,7 @@ data.combined <- data.combined.pca # rename this variable since it's the one we'
 
 
 # Create container folder for output of this script
-subdir <- 'runClustering'
+subDir <- 'runClustering_pc20_r1p2'
 
 if (file.exists(subDir)){
     setwd(file.path(mainDir, subDir))
@@ -34,7 +35,7 @@ if (file.exists(subDir)){
 
 
 # Declare number of PCs to choose
-pc_chosen <- 26
+pc_chosen <- 20
 
 # Find Clusters of Cells
 ## save.SNN = T saves the SNN so that the clustering algorithm can be rerun
@@ -52,9 +53,9 @@ PrintFindClustersParams(object = data.combined) #print what settings you used
 # Create a tSNE
 print('Creating tSNE...')
 
-
-
-setwd(subdir)
+getwd()
+setwd(mainDir)
+setwd(subDir)
 data.combined <- RunTSNE(object = data.combined, dims.use = 1:pc_chosen, do.fast = TRUE, check_duplicates = FALSE)
 
 ## note that you can set do.label=T to help label individual clusters
@@ -64,12 +65,14 @@ dev.off()
 
 ## save tSNE for later
 setwd('../RData')
-saveRDS(data.combined, file = "data.combined_pc36_1.2.rds")
+saveRDS(data.combined, file = "data.combined.rds")
 
 ## build a dendrogram to visualize how close things are
-pdf(file='buildClusterTree.pdf', height=8, width=8)
-data.combined <- BuildClusterTree(data.combined, pcs.use = pc_chosen)
-dev.off()
+setwd(mainDir)
+setwd(subDir)
+#pdf(file='buildClusterTree.pdf', height=8, width=8)
+#data.combined <- BuildClusterTree(data.combined, pcs.use = pc_chosen)
+#dev.off()
 
 # Find cluster biomarkers
 print('Finding clusters...')
@@ -78,9 +81,20 @@ library(dplyr) # so you can use magrittr's ceci n'est pas une pipe
 data.combined.markers <- FindAllMarkers(object = data.combined, only.pos = TRUE, min.pct = 0.25, thresh.use = 0.25)
 data.combined.markers %>% group_by(cluster) %>% top_n(2, avg_logFC)
 
+## print out clusters 
+print('Printing out markers in clusters...')
+nclust <- length(levels(data.combined.markers$cluster)) # total number of clusters
+
+for (i in c(0:(length(levels(data.combined.markers$cluster)) -1 ) ) ) {
+  print(i)
+  clustMarkers <- data.combined.markers[data.combined.markers$cluster == i,]
+  
+  write.csv(clustMarkers, file = paste0('clustMarkers_',i,'.csv'), quote = FALSE, row.names=TRUE, col.names=TRUE )
+}
+
 
 ## Plot heatmap of top ten genes per cluster
-top10 <- data.combined.markers_pc36_1.2 %>% group_by(cluster) %>% top_n(10, avg_logFC)
+top10 <- data.combined.markers %>% group_by(cluster) %>% top_n(10, avg_logFC)
 
 # setting slim.col.label to TRUE will print just the cluster IDS instead of
 # every cell name
