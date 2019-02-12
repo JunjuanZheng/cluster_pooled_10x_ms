@@ -92,6 +92,11 @@ wt.lps <- myCondSeurat(list.filenames.wt.lps, mtxPath, 'WT.LPS', files)
 het.sal <- myCondSeurat(list.filenames.het.sal, mtxPath, 'HET.SAL', files)
 het.lps <- myCondSeurat(list.filenames.het.lps, mtxPath, 'HET.LPS', files)
 
+# Print what is in each one
+table(wt.sal@meta.data$orig.ident)
+table(wt.lps@meta.data$orig.ident)
+table(het.sal@meta.data$orig.ident)
+table(het.lps@meta.data$orig.ident)
 
 # save variables
 setwd(paste0(outputDir, subDir))

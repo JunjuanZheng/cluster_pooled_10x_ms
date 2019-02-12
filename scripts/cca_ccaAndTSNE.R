@@ -32,7 +32,8 @@ if (file.exists(subDir)){
 }
 
 ## load needed files
-print('\nLoading needed files...')
+print('~*~')
+print('Loading needed files...')
 setwd(fileLoc)
 load('allVars.RData')
 
@@ -40,7 +41,8 @@ setwd(paste0(outputDir, subDir))
 
 
 # Figure out what genes should be inputs to CCA
-print('\nFiguring out what genes should be inputs to CCA...')
+print('~*~')
+print('Figuring out what genes should be inputs to CCA...')
 print(paste0('System time: ', Sys.time()))
 ## Find variable genes
 wt.sal <- FindVariableGenes(wt.sal, do.plot = F)
@@ -64,8 +66,8 @@ genes.use <- intersect(genes.use, rownames(het.lps@scale.data))
 
 
 # Run Canonical Correlation Analysis
-
-print('\nRunning Canonical Correlation Analysis...')
+print('~*~')
+print('Running Canonical Correlation Analysis...')
 print(paste0('System time: ', Sys.time()))
 
 objects <- c(wt.sal, wt.lps, het.sal, het.lps)
@@ -76,19 +78,28 @@ data.combined <- RunMultiCCA(objects, genes.use = genes.use, num.ccs = 30, add.c
 head(x = data.combined@cell.names)
 table(data.combined@meta.data$orig.ident)
 
+## save variable because it takes so long to make
+setwd(paste0(outputDir, subDir))
+save(data.combined, file = paste0("data.combined_multiCCA.RData"))
+
 # add my own metadata to Seurat object !!!!! FIX THIS
-print('\nAdding my metadata to Seurat...')
+print('~*~')
+print('Adding my metadata to Seurat...')
+
+## prepare metadata
 myCells <- data.frame(cellNames = data.combined@cell.names)
 myCells$Identity <- toupper(data.combined@meta.data$orig.ident)
 metadataCols <- c('SampleID','CellsPerSample','SurgeryDate','Condition', 'Genotype', 'Litter')
 myMetadata <- merge(myCells, metadata[,metadataCols], by.x='Identity', by.y='SampleID')
 rownames(myMetadata) <- myMetadata$cellNames
 
-# add to Seurat object
+## add metadata to Seurat object
 data.combined <- AddMetaData(data.combined, myMetadata[,-c(1:2)], col.name = metadataCols[-c(1:2)])
 
-## visualize results of CCA plot CC1 versus CC2 and look at a violin plot
+
+# visualize results of CCA plot CC1 versus CC2 and look at a violin plot
 print('Making visualizations of CCA results...')
+## Function
 visResultsCCA <- function(data.combined, myGroup){
     p1 <- DimPlot(object = data.combined, reduction.use = "cca", group.by = myGroup, 
     pt.size = 0.5, do.return = TRUE)
@@ -101,19 +112,62 @@ visResultsCCA <- function(data.combined, myGroup){
     dev.off()
 }
 
+## Deploy
 visResultsCCA(data.combined, "stim")
+visResultsCCA(data.combined, "Litter")
+visResultsCCA(data.combined, "CellsPerSample")
+visResultsCCA(data.combined, "SurgeryDate")
+visResultsCCA(data.combined, "Condition")
+visResultsCCA(data.combined, "Genotype")
 
 
+# Choose which CCs to use
+print('~*~')
+print('Making graphs to choose which CCs to use...')
+print(paste0('System time: ', Sys.time()))
+## bicor plot - when do we see a dropoff in signal/when does change in x not account for large change in y?
 
+makeBicorPlot <- function(data.combined, myGroup){
+    p3 <- MetageneBicorPlot(data.combined, grouping.var = myGroup, dims.eval = 1:30, 
+    display.progress = FALSE)
+    
+    ggsave(file = paste0('bicorPlot_', myGroup, '.pdf'), plot = p3, device='pdf')
+}
 
+makeBicorPlot(data.combined, "stim")
+makeBicorPlot(data.combined, "Litter")
+makeBicorPlot(data.combined, "CellsPerSample") #!
+makeBicorPlot(data.combined, "SurgeryDate")
+makeBicorPlot(data.combined, "Condition")
+makeBicorPlot(data.combined, "Genotype")
 
+## heatmap to assess which components are actually important?
+pdf(file = 'dimHeatmap_1_9.pdf')
+DimHeatmap(object = data.combined, reduction.type = "cca", cells.use = 500, dim.use = 1:9, do.balanced = TRUE)
+dev.off()
 
+pdf(file = 'dimHeatmap_10_19.pdf')
+DimHeatmap(object = data.combined, reduction.type = "cca", cells.use = 500, dim.use = 10:19, do.balanced = TRUE)
+dev.off()
 
+pdf(file = 'dimHeatmap_20_29.pdf')
+DimHeatmap(object = data.combined, reduction.type = "cca", cells.use = 500, dim.use = 20:29, do.balanced = TRUE)
+dev.off()
 
+## choose number of CCs to use, based on above
+chosen_cc <- 20
 
+# Align CCA subspaces
+print('~*~')
+print('Align CCA subspaces...')
+print(paste0('System time: ', Sys.time()))
 
 
 # save variables
+print('~*~')
+print('Saving variables...')
+print(paste0('System time: ', Sys.time()))
+
 setwd(paste0(outputDir, subDir))
 save.image(file = paste0("allVars.RData"))
 
