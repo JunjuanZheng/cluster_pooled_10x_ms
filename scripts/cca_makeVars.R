@@ -21,13 +21,13 @@ print(paste0('Output location: ', args[3]))
 
 # make subdirectory
 setwd(outputDir)
-subdir <- 'makeVars'
+subDir <- 'makeVars'
 
 if (file.exists(subDir)){
-    setwd(file.path(mainDir, subDir))
+    setwd(file.path(outputDir, subDir))
 } else {
-    dir.create(file.path(mainDir, subDir))
-    setwd(file.path(mainDir, subDir))
+    dir.create(file.path(outputDir, subDir))
+    setwd(file.path(outputDir, subDir))
 }
 
 # get file names
@@ -57,15 +57,16 @@ myCondSeurat <- function(filenames, mtxPath, condName, files){
   
   # make first seurat object
   print(paste0('Making initial Seurat object with ', filenames[1], '...'))
-  initialData <- Read10X(data.dir = paste0(mtxPath, filenames[1], '/mm10/') )
+  print(paste0('Location of file: ', mtxPath, '/', filenames[1], '/mm10/') )
+  initialData <- Read10X(data.dir = paste0(mtxPath, '/', filenames[1], '/mm10/') )
   data <- CreateSeuratObject(raw.data = initialData, project = condName, min.cells = 3, min.features=200, names.field = files[1,2])
   
   # now merge with the others
   for (i in 2:length(filenames)){
     
     # make this iteration's seurat object
-    addingData <- Read10X(data.dir = paste0(mtxPath, filenames[i], '/mm10/') )
-    print(paste0('Reading in data from ',mtxPath,filenames[i],'...'))
+    addingData <- Read10X(data.dir = paste0(mtxPath, '/', filenames[i], '/mm10/') )
+    print(paste0('Reading in data from ',mtxPath, '/', filenames[i], '...'))
     addingData_obj <- CreateSeuratObject(raw.data = addingData, project = condName, min.cells = 3, min.features=200) # create object
     
     # merge this new seurat object with existing data
@@ -93,7 +94,7 @@ het.lps <- myCondSeurat(list.filenames.het.lps, mtxPath, 'HET.LPS', files)
 
 
 # save variables
-setwd(paste0(outputDir, subdir))
+setwd(paste0(outputDir, subDir))
 save.image(file = paste0("allVars.RData"))
 
 print('~*~ All done! ~*~')
