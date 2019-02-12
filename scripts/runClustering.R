@@ -36,6 +36,7 @@ if (file.exists(subDir)){
 
 # Declare number of PCs to choose
 pc_chosen <- 20
+res_chosen <- 1.2
 
 # Find Clusters of Cells
 ## save.SNN = T saves the SNN so that the clustering algorithm can be rerun
@@ -44,7 +45,7 @@ pc_chosen <- 20
 ## If this ends up taking too much time, lower n.start parameter to 10 (default 100) or employ an approximate nearest neighbor search via the RANN package by increasing the nn.eps parameter. Defafult is 0= exact nearest neighbor search
 print('Finding clusters of cells...')
 
-data.combined <- FindClusters(object = data.combined, reduction.type = "pca", dims.use = 1:pc_chosen, resolution = 1.2, print.output = 0, save.SNN = TRUE, force.recalc = TRUE)
+data.combined <- FindClusters(object = data.combined, reduction.type = "pca", dims.use = 1:pc_chosen, resolution = res_chosen, print.output = 0, save.SNN = TRUE, force.recalc = TRUE)
 
 PrintFindClustersParams(object = data.combined) #print what settings you used
 
@@ -65,7 +66,7 @@ dev.off()
 
 ## save tSNE for later
 setwd('../RData')
-saveRDS(data.combined, file = "data.combined.rds")
+saveRDS(data.combined, file = paste0("data.combined_pc", pc_chosen, "_r", res_chosen, "r.rds") ) 
 
 ## build a dendrogram to visualize how close things are
 setwd(mainDir)
@@ -102,7 +103,8 @@ pdf(file='clusterMarkerHeatmap.pdf, height=15, width=15)
 DoHeatmap(object = data.combined, genes.use = top10$gene, slim.col.label = TRUE, remove.key = TRUE)
 dev.off()
 
-
+# save files
+save.image(file = paste0("allVars_pc", pc_chosen, "_r", res_chosen, ".RData") )
 
 
 print('~*~ Complete ~*~')
