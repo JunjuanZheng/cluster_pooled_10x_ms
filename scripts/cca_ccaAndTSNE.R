@@ -107,9 +107,17 @@ visResultsCCA <- function(data.combined, myGroup){
     p2 <- VlnPlot(object = data.combined, features.plot = "CC1", group.by = "stim", 
     do.return = TRUE)
     
-    pdf( paste0('CCA_DimPlot_VlnPlot_grpby_', myGroup, '.pdf') , width=10, height=10)
+    # save method 1
+    pdf( paste0('CCA_DimPlot_VlnPlot_grpby_', myGroup, '_oldSaveMethod.pdf') , width=10, height=10)
     plot_grid(p1, p2)
     dev.off()
+    
+    # save method 2
+    ggsave(file = paste0('CCA_DimPlot_', myGroup, '.pdf'), plot = p1, device='pdf')
+    ggsave(file = paste0('CCA_VlnPlot', myGroup, '.pdf'), plot = p2, device='pdf')
+    
+    
+    
 }
 
 ## Deploy
@@ -172,3 +180,4 @@ setwd(paste0(outputDir, subDir))
 save.image(file = paste0("allVars.RData"))
 
 print('~*~ All done! ~*~')
+print(paste0('System time: ', Sys.time()))

@@ -53,26 +53,33 @@ list.filenames.het.lps <- files[files$ids %in% metadata[metadata$Group == 'HET.L
 # loop, but where first entry is used to make mergeSeurat, and subsequent used to tack on Seurat
 # condName, e.g. 'WT.SAL'
 # files: variable created above that has both file IDs and sample IDs
+# !!!!! WORK ON MAKING ORIG.IDENT ACCURATE. FIX FILES HERE WHICH REFERES TO EVERYTHING RN
 myCondSeurat <- function(filenames, mtxPath, condName, files){
+  print('~*~')
+  print(paste0('Working on ', condName))
+  
+  # pull out only files of interest
+  files_relevant <- files[which(files$filenames %in% filenames),]
+  print(files_relevant)
   
   # make first seurat object
   print(paste0('Making initial Seurat object with ', filenames[1], '...'))
-  print(paste0('Location of file: ', mtxPath, '/', filenames[1], '/mm10/') )
   initialData <- Read10X(data.dir = paste0(mtxPath, '/', filenames[1], '/mm10/') )
-  data <- CreateSeuratObject(raw.data = initialData, project = condName, min.cells = 3, min.features=200, names.field = files[1,2])
+  data <- CreateSeuratObject(raw.data = initialData, project = condName, min.cells = 3, min.features=200, names.field = files_relevant[1,2])
+  data@meta.data$orig.ident <- files_relevant[1,'ids'] 
   
   # now merge with the others
   for (i in 2:length(filenames)){
     
     # make this iteration's seurat object
     addingData <- Read10X(data.dir = paste0(mtxPath, '/', filenames[i], '/mm10/') )
-    print(paste0('Reading in data from ',mtxPath, '/', filenames[i], '...'))
+    print(paste0('Reading in data from ',mtxPath, '/', filenames[i],'...'))
     addingData_obj <- CreateSeuratObject(raw.data = addingData, project = condName, min.cells = 3, min.features=200) # create object
-    
+    addingData_obj@meta.data$orig.ident <- files_relevant[i,'ids']
+
     # merge this new seurat object with existing data
     print(paste0('Merging Seurat data with data from ', filenames[i], '...'))
-    data <- MergeSeurat(data,addingData_obj,
-                        add.cell.id2 = files[i,'ids'], project = condName)
+    data <- MergeSeurat(data,addingData_obj, project = condName, add.cell.id2 = filenames[i])
   }
   
   # give everything in this Seurat Object a condition name
