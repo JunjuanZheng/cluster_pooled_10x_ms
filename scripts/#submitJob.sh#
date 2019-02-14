@@ -19,4 +19,4 @@ Rscript runBigScaleData.R $MTX_16p_SC_MS $OUTPUT_16p/201901_cluster_pooled_10x_m
 Rscript runPCA.R $OUTPUT_16p/201901_cluster_pooled_10x_ms/standard/20190214
 
 ## Clustering script. Order of variables: (1) Output file    
-Rscript runClustering.R $OUTPUT_16p/201901_cluster_pooled_10x_ms/standard/20190214
+Rscript runClustering.R $OUTPUT_16p/201901_cluster_pooled_10x_ms/2019

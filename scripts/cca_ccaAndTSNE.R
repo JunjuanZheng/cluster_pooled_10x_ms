@@ -7,6 +7,7 @@
 #install.packages('Seurat')
 
 # Set up workspace
+print('Run CCA Track: ccaAndTSNE.R')
 print('Setting up workspace...')
 ## Load older version of Seurat which has the functions I need
 library('Seurat', lib.loc='/scg/apps/software/r/3.5.0/scg/seurat_2.3')
@@ -30,6 +31,8 @@ if (file.exists(subDir)){
     dir.create(file.path(outputDir, subDir))
     setwd(file.path(outputDir, subDir))
 }
+
+
 
 ## load needed files
 print('~*~')
@@ -73,13 +76,16 @@ print(paste0('System time: ', Sys.time()))
 objects <- c(wt.sal, wt.lps, het.sal, het.lps)
 cellIDs <- c('WT.SAL', 'WT.LPS', 'HET.SAL', 'HET.LPS')
 
-data.combined <- RunMultiCCA(objects, genes.use = genes.use, num.ccs = 30, add.cell.ids = cellIDs)
+data.combined <- RunMultiCCA(objects, genes.use = genes.use, num.ccs = 30) #, add.cell.ids = cellIDs)
 
 head(x = data.combined@cell.names)
-table(data.combined@meta.data$orig.ident)
+head(data.combined@meta.data)
+table(data.combined@meta.data$orig.ident) # vewrify that it works and you can detect sample types still
 
 ## save variable because it takes so long to make
 setwd(paste0(outputDir, subDir))
+print(paste0('Directory should be ',paste0(outputDir, subDir)) )
+setwd(file.path(outputDir, subDir))
 save(data.combined, file = paste0("data.combined_multiCCA.RData"))
 
 # add my own metadata to Seurat object !!!!! FIX THIS
@@ -96,7 +102,19 @@ rownames(myMetadata) <- myMetadata$cellNames
 ## add metadata to Seurat object
 data.combined <- AddMetaData(data.combined, myMetadata[,-c(1:2)], col.name = metadataCols[-c(1:2)])
 
+setwd(file.path(outputDir, subDir))
+save(data.combined, file = paste0("data.combined_multiCCA_metadata.RData")) # save that data
 
+
+
+
+# If you already ran the above - load the data and start from here
+setwd(file.path(outputDir, subDir))
+load('data.combined_multiCCA.RData')
+load('data.combined_multiCCA_metadata.RData')
+
+          
+          
 # visualize results of CCA plot CC1 versus CC2 and look at a violin plot
 print('Making visualizations of CCA results...')
 ## Function
@@ -107,17 +125,11 @@ visResultsCCA <- function(data.combined, myGroup){
     p2 <- VlnPlot(object = data.combined, features.plot = "CC1", group.by = "stim", 
     do.return = TRUE)
     
-    # save method 1
-    pdf( paste0('CCA_DimPlot_VlnPlot_grpby_', myGroup, '_oldSaveMethod.pdf') , width=10, height=10)
     plot_grid(p1, p2)
-    dev.off()
     
     # save method 2
     ggsave(file = paste0('CCA_DimPlot_', myGroup, '.pdf'), plot = p1, device='pdf')
-    ggsave(file = paste0('CCA_VlnPlot', myGroup, '.pdf'), plot = p2, device='pdf')
-    
-    
-    
+    ggsave(file = paste0('CCA_VlnPlot_', myGroup, '.pdf'), plot = p2, device='pdf')
 }
 
 ## Deploy

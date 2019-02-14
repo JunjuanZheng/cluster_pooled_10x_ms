@@ -15,6 +15,8 @@ args <- commandArgs(TRUE)
 mtxPath <- args[1]
 metadataPath <- args[2]
 outputDir <- args[3]
+
+print('Run CCA Track: cca_makeVars.R')
 print(paste0('Mtx File location: ', args[1]))
 print(paste0('Metadata location: ', args[2]))
 print(paste0('Output location: ', args[3]))

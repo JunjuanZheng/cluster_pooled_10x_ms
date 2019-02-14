@@ -9,6 +9,7 @@ packageVersion('Seurat')
 
 
 # load needed files
+print('Run Regular Track: runClustering.R')
 print('Loading needed files...')
 args <- commandArgs(TRUE) # load in arguments that accompanied script
 mainDir <- args[1]
@@ -70,9 +71,9 @@ saveRDS(data.combined, file = paste0("data.combined_pc", pc_chosen, "_r", res_ch
 ## build a dendrogram to visualize how close things are
 setwd(mainDir)
 setwd(subDir)
-pdf(file='buildClusterTree.pdf', height=8, width=8)
-data.combined <- BuildClusterTree(data.combined, pcs.use = pc_chosen)
-dev.off()
+#pdf(file='buildClusterTree.pdf', height=8, width=8) # is this in wrong place?
+#data.combined <- BuildClusterTree(data.combined, pcs.use = pc_chosen)
+#dev.off()
 
 # Find cluster biomarkers
 print('Finding clusters...')
@@ -152,6 +153,11 @@ tallyClusters <- function(data.combined, clusterNames){
 
 table(data.combined@meta.data$orig.ident) # print table so you know what it's tallying by and what first one should be
 tally <- tallyClusters(data.combined, paste0("ClusterNames_pc", pc_chosen, "_r", res_chosen))
+
+
+pdf(file='buildClusterTree.pdf', height=8, width=8) # is this in wrong place?
+data.combined <- BuildClusterTree(data.combined, pcs.use = pc_chosen)
+dev.off()
 
 
 # save files

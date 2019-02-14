@@ -1,0 +1,34 @@
+# Kristin Muench
+# 2019.02.12
+# Pipeline to run Seurat setup for mouse scRNA-Seq data - with CCA
+
+# Load needed library
+#install.packages('Seurat')
+
+
+# Load older version of Seurat which has the functions I need
+library('Seurat', lib.loc='/scg/apps/software/r/3.5.0/scg/seurat_2.3')
+packageVersion('Seurat')
+
+# import from command line
+args <- commandArgs(TRUE)
+#load(args[1])
+mtxPath <- args[1]
+metadataPath <- args[2]
+outputDir <- args[3]
+print(paste0('Mtx File location: ', args[1]))
+print(paste0('Metadata location: ', args[2]))
+print(paste0('Output location: ', args[3]))
+
+# get file names
+list.filenames <- list.files(args[1])
+
+print('Example file location:')
+print(paste0(args[1], '/', list.filenames[1],'/mm10/'))
+
+# read metadata
+metadata<-read.csv(metadataPath)
+
+
+# save variables
+save.image(file = paste0("allVars.RData"))

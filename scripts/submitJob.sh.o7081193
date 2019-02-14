@@ -1,0 +1,120 @@
+[1] ‘2.3.4’
+[1] "Run CCA Track: cca_makeVars.R"
+[1] "Mtx File location: /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData"
+[1] "Metadata location: /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/metadata/20190211_sampleTable.csv"
+[1] "Output location: /scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190214/"
+[1] "Example file location:"
+[1] "/labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/E_filtered_gene_bc_matrices/mm10/"
+[1] "~*~"
+[1] "Working on WT.SAL"
+                       filenames ids
+4    H_filtered_gene_bc_matrices   H
+5    I_filtered_gene_bc_matrices   I
+11 KM2_filtered_gene_bc_matrices KM2
+13   M_filtered_gene_bc_matrices   M
+[1] "Making initial Seurat object with H_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/I_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from I_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/KM2_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from KM2_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/M_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from M_filtered_gene_bc_matrices..."
+[1] "~*~"
+[1] "Working on WT.LPS"
+                        filenames  ids
+2     F_filtered_gene_bc_matrices    F
+7     K_filtered_gene_bc_matrices    K
+9  KM13_filtered_gene_bc_matrices KM13
+14    N_filtered_gene_bc_matrices    N
+[1] "Making initial Seurat object with F_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/K_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from K_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/KM13_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from KM13_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/N_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from N_filtered_gene_bc_matrices..."
+[1] "~*~"
+[1] "Working on HET.SAL"
+                       filenames ids
+1    E_filtered_gene_bc_matrices   E
+6    J_filtered_gene_bc_matrices   J
+8  KM1_filtered_gene_bc_matrices KM1
+15   O_filtered_gene_bc_matrices   O
+[1] "Making initial Seurat object with E_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/J_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from J_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/KM1_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from KM1_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/O_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from O_filtered_gene_bc_matrices..."
+[1] "~*~"
+[1] "Working on HET.LPS"
+                        filenames  ids
+3     G_filtered_gene_bc_matrices    G
+10 KM18_filtered_gene_bc_matrices KM18
+12    L_filtered_gene_bc_matrices    L
+16    P_filtered_gene_bc_matrices    P
+[1] "Making initial Seurat object with G_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/KM18_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from KM18_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/L_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from L_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/P_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from P_filtered_gene_bc_matrices..."
+
+   H    I  KM2    M 
+6666 1162 1381 7988 
+
+   F    K KM13    N 
+7606 1209 1400 7540 
+
+   E    J  KM1    O 
+8935  861 1453 6565 
+
+   G KM18    L    P 
+8216 1098  897 8193 
+[1] "~*~ All done! ~*~"
+[1] "Run CCA Track: ccaAndTSNE.R"
+[1] "Setting up workspace..."
+[1] ‘2.3.4’
+[1] "Importing files from: /scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190214/makeVars"
+[1] "Output location: /scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190214/"
+[1] "~*~"
+[1] "Loading needed files..."
+[1] "~*~"
+[1] "Figuring out what genes should be inputs to CCA..."
+[1] "System time: 2019-02-14 10:18:51"
+[1] "Highly variable genes:"
+[1] "~*~"
+[1] "Running Canonical Correlation Analysis..."
+[1] "System time: 2019-02-14 10:19:41"
+[1] "Computing CC 1"
+[1] "Computing CC 2"
+[1] "Computing CC 3"
+[1] "Computing CC 4"
+[1] "Computing CC 5"
+[1] "Computing CC 6"
+[1] "Computing CC 7"
+[1] "Computing CC 8"
+[1] "Computing CC 9"
+[1] "Computing CC 10"
+[1] "Computing CC 11"
+[1] "Computing CC 12"
+[1] "Computing CC 13"
+[1] "Computing CC 14"
+[1] "Computing CC 15"
+[1] "Computing CC 16"
+[1] "Computing CC 17"
+[1] "Computing CC 18"
+[1] "Computing CC 19"
+[1] "Computing CC 20"
+[1] "Computing CC 21"
+[1] "Computing CC 22"
+[1] "Computing CC 23"
+[1] "Computing CC 24"
+[1] "Computing CC 25"
+[1] "Computing CC 26"
+[1] "Computing CC 27"
+[1] "Computing CC 28"
+[1] "Computing CC 29"
+[1] "Computing CC 30"

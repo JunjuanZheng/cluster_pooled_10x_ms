@@ -7,6 +7,7 @@ library('Seurat', lib.loc='/scg/apps/software/r/3.5.0/scg/seurat_2.3')
 packageVersion('Seurat')
 
 # load needed files
+print('Run Regular Track: runPCA.R')
 print('Loading needed files...')
 args <- commandArgs(TRUE) # load in arguments that accompanied script
 setwd(args[1])

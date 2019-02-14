@@ -23,6 +23,7 @@ print(paste0('Output location: ', args[2]))
 list.filenames <- list.files(args[1])
 identifier <- 'E' # make arbitrary identifier to initialize
 
+print('Run Regular Track: runBigScaleData.R')
 print('Example file location:')
 print(paste0(args[1], '/', list.filenames[1],'/mm10/'))
 
