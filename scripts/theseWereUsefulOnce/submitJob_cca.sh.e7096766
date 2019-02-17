@@ -1,0 +1,16 @@
+Loading required package: ggplot2
+Loading required package: cowplot
+
+Attaching package: ‘cowplot’
+
+The following object is masked from ‘package:ggplot2’:
+
+    ggsave
+
+Loading required package: Matrix
+Error in readChar(con, 5L, useBytes = TRUE) : cannot open the connection
+Calls: load -> readChar
+In addition: Warning message:
+In readChar(con, 5L, useBytes = TRUE) :
+  cannot open compressed file 'data.combined_multiCCA.RData', probable reason 'No such file or directory'
+Execution halted

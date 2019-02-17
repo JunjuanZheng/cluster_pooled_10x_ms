@@ -21,9 +21,15 @@ outputDir <- args[1]
 print(paste0('Importing files from: ', fileLoc))
 print(paste0('Output location: ', outputDir))
 
+## load needed files
+print('~*~')
+print('Loading needed files...')
+setwd(fileLoc)
+load('allVars.RData')
+
 ## make subdirectory
 setwd(outputDir)
-subDir <- 'ccaAndTSNE'
+subDir <- 'ccaAndTSNE_sampleCol_runWith45'
 
 if (file.exists(subDir)){
     setwd(file.path(outputDir, subDir))
@@ -32,16 +38,7 @@ if (file.exists(subDir)){
     setwd(file.path(outputDir, subDir))
 }
 
-
-
-## load needed files
-print('~*~')
-print('Loading needed files...')
-setwd(fileLoc)
-load('allVars.RData')
-
 setwd(paste0(outputDir, subDir))
-
 
 # Figure out what genes should be inputs to CCA
 print('~*~')
@@ -68,18 +65,31 @@ genes.use <- intersect(genes.use, rownames(het.sal@scale.data))
 genes.use <- intersect(genes.use, rownames(het.lps@scale.data))
 
 
+# Create metadata variable to store sample name
+wt.sal@meta.data$sample <- wt.sal@meta.data$orig.ident
+wt.lps@meta.data$sample <- wt.lps@meta.data$orig.ident
+het.sal@meta.data$sample <- het.sal@meta.data$orig.ident
+het.lps@meta.data$sample <- het.lps@meta.data$orig.ident
+
+
+# !!!! DO I NEED TO ADD METADATA AT THIS STEP?
 # Run Canonical Correlation Analysis
 print('~*~')
 print('Running Canonical Correlation Analysis...')
 print(paste0('System time: ', Sys.time()))
+setwd(paste0(outputDir, subDir))
 
 objects <- c(wt.sal, wt.lps, het.sal, het.lps)
 cellIDs <- c('WT.SAL', 'WT.LPS', 'HET.SAL', 'HET.LPS')
+#cellIDs <- c(as.character(wt.sal@meta.data$orig.ident), as.character(wt.lps@meta.data$orig.ident), as.character(het.sal@meta.data$orig.ident), as.character(het.lps@meta.data$orig.ident))
 
-data.combined <- RunMultiCCA(objects, genes.use = genes.use, num.ccs = 30) #, add.cell.ids = cellIDs)
+head(wt.sal@meta.data)
+head(x = wt.sal@cell.names)
 
-head(x = data.combined@cell.names)
+data.combined <- RunMultiCCA(objects, genes.use = genes.use, num.ccs = 45, add.cell.ids = cellIDs)
+
 head(data.combined@meta.data)
+head(x = data.combined@cell.names)
 table(data.combined@meta.data$orig.ident) # vewrify that it works and you can detect sample types still
 
 ## save variable because it takes so long to make
@@ -88,13 +98,19 @@ print(paste0('Directory should be ',paste0(outputDir, subDir)) )
 setwd(file.path(outputDir, subDir))
 save(data.combined, file = paste0("data.combined_multiCCA.RData"))
 
+# # uncomment to just load earlier file ~~~~~~
+# print('Loading CCA file you made before...')
+# setwd(file.path(outputDir, subDir))
+# print(paste0('file path is: ', file.path(outputDir, subDir)))
+# load("data.combined_multiCCA.RData")
+
 # add my own metadata to Seurat object !!!!! FIX THIS
 print('~*~')
 print('Adding my metadata to Seurat...')
 
 ## prepare metadata
 myCells <- data.frame(cellNames = data.combined@cell.names)
-myCells$Identity <- toupper(data.combined@meta.data$orig.ident)
+myCells$Identity <- data.combined@meta.data$sample
 metadataCols <- c('SampleID','CellsPerSample','SurgeryDate','Condition', 'Genotype', 'Litter')
 myMetadata <- merge(myCells, metadata[,metadataCols], by.x='Identity', by.y='SampleID')
 rownames(myMetadata) <- myMetadata$cellNames
@@ -122,7 +138,7 @@ visResultsCCA <- function(data.combined, myGroup){
     p1 <- DimPlot(object = data.combined, reduction.use = "cca", group.by = myGroup, 
     pt.size = 0.5, do.return = TRUE)
     
-    p2 <- VlnPlot(object = data.combined, features.plot = "CC1", group.by = "stim", 
+    p2 <- VlnPlot(object = data.combined, features.plot = "CC1", group.by = myGroup, 
     do.return = TRUE)
     
     plot_grid(p1, p2)

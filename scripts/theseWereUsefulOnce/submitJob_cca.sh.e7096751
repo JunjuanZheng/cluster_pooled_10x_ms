@@ -1,0 +1,13 @@
+Loading required package: ggplot2
+Loading required package: cowplot
+
+Attaching package: ‘cowplot’
+
+The following object is masked from ‘package:ggplot2’:
+
+    ggsave
+
+Loading required package: Matrix
+Error in file.path(outputDir, subDir) : object 'subDir' not found
+Calls: setwd -> file.path
+Execution halted

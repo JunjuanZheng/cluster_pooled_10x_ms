@@ -1,0 +1,69 @@
+[1] "Run CCA Track: ccaAndTSNE.R"
+[1] "Setting up workspace..."
+[1] ‘2.3.4’
+[1] "Importing files from: /scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190214/makeVars"
+[1] "Output location: /scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190214/"
+[1] "~*~"
+[1] "Loading needed files..."
+[1] "~*~"
+[1] "Figuring out what genes should be inputs to CCA..."
+[1] "System time: 2019-02-15 17:51:49"
+[1] "Highly variable genes:"
+[1] "~*~"
+[1] "Running Canonical Correlation Analysis..."
+[1] "System time: 2019-02-15 17:52:39"
+                 nGene  nUMI orig.ident   stim sample
+AAACCTGAGACACGAC  4099 15891          H WT.SAL      H
+AAACCTGAGGAATCGC  5066 21944          H WT.SAL      H
+AAACCTGAGTGAACAT  4206 14681          H WT.SAL      H
+AAACCTGCAACAACCT  5140 24872          H WT.SAL      H
+AAACCTGCACAGTCGC  4150 13165          H WT.SAL      H
+AAACCTGCACCAGGTC  4324 16199          H WT.SAL      H
+[1] "AAACCTGAGACACGAC" "AAACCTGAGGAATCGC" "AAACCTGAGTGAACAT" "AAACCTGCAACAACCT"
+[5] "AAACCTGCACAGTCGC" "AAACCTGCACCAGGTC"
+[1] "Computing CC 1"
+[1] "Computing CC 2"
+[1] "Computing CC 3"
+[1] "Computing CC 4"
+[1] "Computing CC 5"
+[1] "Computing CC 6"
+[1] "Computing CC 7"
+[1] "Computing CC 8"
+[1] "Computing CC 9"
+[1] "Computing CC 10"
+[1] "Computing CC 11"
+[1] "Computing CC 12"
+[1] "Computing CC 13"
+[1] "Computing CC 14"
+[1] "Computing CC 15"
+[1] "Computing CC 16"
+[1] "Computing CC 17"
+[1] "Computing CC 18"
+[1] "Computing CC 19"
+[1] "Computing CC 20"
+[1] "Computing CC 21"
+[1] "Computing CC 22"
+[1] "Computing CC 23"
+[1] "Computing CC 24"
+[1] "Computing CC 25"
+[1] "Computing CC 26"
+[1] "Computing CC 27"
+[1] "Computing CC 28"
+[1] "Computing CC 29"
+[1] "Computing CC 30"
+                        nGene  nUMI orig.ident   stim sample
+WT.SAL_AAACCTGAGACACGAC  4099 15891     WT.SAL WT.SAL      H
+WT.SAL_AAACCTGAGGAATCGC  5066 21944     WT.SAL WT.SAL      H
+WT.SAL_AAACCTGAGTGAACAT  4206 14681     WT.SAL WT.SAL      H
+WT.SAL_AAACCTGCAACAACCT  5140 24872     WT.SAL WT.SAL      H
+WT.SAL_AAACCTGCACAGTCGC  4150 13165     WT.SAL WT.SAL      H
+WT.SAL_AAACCTGCACCAGGTC  4324 16199     WT.SAL WT.SAL      H
+[1] "WT.SAL_AAACCTGAGACACGAC" "WT.SAL_AAACCTGAGGAATCGC"
+[3] "WT.SAL_AAACCTGAGTGAACAT" "WT.SAL_AAACCTGCAACAACCT"
+[5] "WT.SAL_AAACCTGCACAGTCGC" "WT.SAL_AAACCTGCACCAGGTC"
+
+HET.LPS HET.SAL  WT.LPS  WT.SAL 
+  18404   17814   17755   17197 
+[1] "Directory should be /scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190214/makeVars"
+[1] "~*~"
+[1] "Adding my metadata to Seurat..."

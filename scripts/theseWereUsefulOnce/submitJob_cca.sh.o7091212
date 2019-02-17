@@ -1,0 +1,23 @@
+[1] "Run CCA Track: ccaAndTSNE.R"
+[1] "Setting up workspace..."
+[1] ‘2.3.4’
+[1] "Importing files from: /scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190214/makeVars"
+[1] "Output location: /scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190214/"
+[1] "~*~"
+[1] "Loading needed files..."
+[1] "~*~"
+[1] "Figuring out what genes should be inputs to CCA..."
+[1] "System time: 2019-02-15 13:55:18"
+[1] "Highly variable genes:"
+[1] "~*~"
+[1] "Running Canonical Correlation Analysis..."
+[1] "System time: 2019-02-15 13:56:08"
+                 nGene  nUMI orig.ident   stim sample
+AAACCTGAGACACGAC  4099 15891          H WT.SAL      H
+AAACCTGAGGAATCGC  5066 21944          H WT.SAL      H
+AAACCTGAGTGAACAT  4206 14681          H WT.SAL      H
+AAACCTGCAACAACCT  5140 24872          H WT.SAL      H
+AAACCTGCACAGTCGC  4150 13165          H WT.SAL      H
+AAACCTGCACCAGGTC  4324 16199          H WT.SAL      H
+[1] "AAACCTGAGACACGAC" "AAACCTGAGGAATCGC" "AAACCTGAGTGAACAT" "AAACCTGCAACAACCT"
+[5] "AAACCTGCACAGTCGC" "AAACCTGCACCAGGTC"

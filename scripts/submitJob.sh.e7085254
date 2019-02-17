@@ -24,7 +24,6 @@ Performing log-normalization
 0%   10   20   30   40   50   60   70   80   90   100%
 [----|----|----|----|----|----|----|----|----|----|
 **************************************************|
-There were 50 or more warnings (use warnings() to see the first 50)
 Performing log-normalization
 0%   10   20   30   40   50   60   70   80   90   100%
 [----|----|----|----|----|----|----|----|----|----|
@@ -41,7 +40,6 @@ Performing log-normalization
 0%   10   20   30   40   50   60   70   80   90   100%
 [----|----|----|----|----|----|----|----|----|----|
 **************************************************|
-There were 50 or more warnings (use warnings() to see the first 50)
 Performing log-normalization
 0%   10   20   30   40   50   60   70   80   90   100%
 [----|----|----|----|----|----|----|----|----|----|
@@ -58,7 +56,6 @@ Performing log-normalization
 0%   10   20   30   40   50   60   70   80   90   100%
 [----|----|----|----|----|----|----|----|----|----|
 **************************************************|
-There were 50 or more warnings (use warnings() to see the first 50)
 Performing log-normalization
 0%   10   20   30   40   50   60   70   80   90   100%
 [----|----|----|----|----|----|----|----|----|----|
@@ -75,7 +72,18 @@ Performing log-normalization
 0%   10   20   30   40   50   60   70   80   90   100%
 [----|----|----|----|----|----|----|----|----|----|
 **************************************************|
-There were 50 or more warnings (use warnings() to see the first 50)
+Calculating gene means
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Calculating gene variance to mean ratios
+0%   10   20   30   40   50   60   70   80   90   100%
+[----|----|----|----|----|----|----|----|----|----|
+**************************************************|
+Regressing out: nUMI
+  |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%  |                                                                              |==============                                                        |  20%  |                                                                              |=====================                                                 |  30%  |                                                                              |============================                                          |  40%  |                                                                              |===================================                                   |  50%  |                                                                              |==========================================                            |  60%  |                                                                              |=================================================                     |  70%  |                                                                              |========================================================              |  80%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
+Scaling data matrix
+  |                                                                              |                                                                      |   0%  |                                                                              |======================================================================| 100%
 Loading required package: ggplot2
 Loading required package: cowplot
 
@@ -86,39 +94,17 @@ The following object is masked from ‘package:ggplot2’:
     ggsave
 
 Loading required package: Matrix
-Calculating gene means
-0%   10   20   30   40   50   60   70   80   90   100%
-[----|----|----|----|----|----|----|----|----|----|
-**************************************************|
-Calculating gene variance to mean ratios
-0%   10   20   30   40   50   60   70   80   90   100%
-[----|----|----|----|----|----|----|----|----|----|
-**************************************************|
-Calculating gene means
-0%   10   20   30   40   50   60   70   80   90   100%
-[----|----|----|----|----|----|----|----|----|----|
-**************************************************|
-Calculating gene variance to mean ratios
-0%   10   20   30   40   50   60   70   80   90   100%
-[----|----|----|----|----|----|----|----|----|----|
-**************************************************|
-Calculating gene means
-0%   10   20   30   40   50   60   70   80   90   100%
-[----|----|----|----|----|----|----|----|----|----|
-**************************************************|
-Calculating gene variance to mean ratios
-0%   10   20   30   40   50   60   70   80   90   100%
-[----|----|----|----|----|----|----|----|----|----|
-**************************************************|
-Calculating gene means
-0%   10   20   30   40   50   60   70   80   90   100%
-[----|----|----|----|----|----|----|----|----|----|
-**************************************************|
-Calculating gene variance to mean ratios
-0%   10   20   30   40   50   60   70   80   90   100%
-[----|----|----|----|----|----|----|----|----|----|
-**************************************************|
-Error in MergeSeurat(object1 = combined.object, object2 = object.list[[i]],  : 
-  Duplicate cell names, please provide 'add.cell.id1' and/or 'add.cell.id2' for unique names
-Calls: RunMultiCCA -> MergeSeurat
+Error in setwd("RData") : cannot change working directory
+Execution halted
+Loading required package: ggplot2
+Loading required package: cowplot
+
+Attaching package: ‘cowplot’
+
+The following object is masked from ‘package:ggplot2’:
+
+    ggsave
+
+Loading required package: Matrix
+Error in setwd("RData") : cannot change working directory
 Execution halted
