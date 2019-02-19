@@ -1,0 +1,130 @@
+Loading required package: ggplot2
+Loading required package: cowplot
+
+Attaching package: ‘cowplot’
+
+The following object is masked from ‘package:ggplot2’:
+
+    ggsave
+
+Loading required package: Matrix
+Rescaling group 1
+Scaling data matrix
+  |                                                                              |                                                                      |   0%  |                                                                              |====                                                                  |   5%  |                                                                              |=======                                                               |  10%  |                                                                              |==========                                                            |  15%  |                                                                              |==============                                                        |  20%  |                                                                              |==================                                                    |  25%  |                                                                              |=====================                                                 |  30%  |                                                                              |========================                                              |  35%  |                                                                              |============================                                          |  40%  |                                                                              |================================                                      |  45%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  55%  |                                                                              |==========================================                            |  60%  |                                                                              |==============================================                        |  65%  |                                                                              |=================================================                     |  70%  |                                                                              |====================================================                  |  75%  |                                                                              |========================================================              |  80%  |                                                                              |============================================================          |  85%  |                                                                              |===============================================================       |  90%  |                                                                              |==================================================================    |  95%  |                                                                              |======================================================================| 100%
+Rescaling group 2
+Scaling data matrix
+  |                                                                              |                                                                      |   0%  |                                                                              |====                                                                  |   5%  |                                                                              |=======                                                               |  10%  |                                                                              |==========                                                            |  15%  |                                                                              |==============                                                        |  20%  |                                                                              |==================                                                    |  25%  |                                                                              |=====================                                                 |  30%  |                                                                              |========================                                              |  35%  |                                                                              |============================                                          |  40%  |                                                                              |================================                                      |  45%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  55%  |                                                                              |==========================================                            |  60%  |                                                                              |==============================================                        |  65%  |                                                                              |=================================================                     |  70%  |                                                                              |====================================================                  |  75%  |                                                                              |========================================================              |  80%  |                                                                              |============================================================          |  85%  |                                                                              |===============================================================       |  90%  |                                                                              |==================================================================    |  95%  |                                                                              |======================================================================| 100%
+Rescaling group 3
+Scaling data matrix
+  |                                                                              |                                                                      |   0%  |                                                                              |====                                                                  |   5%  |                                                                              |=======                                                               |  10%  |                                                                              |==========                                                            |  15%  |                                                                              |==============                                                        |  20%  |                                                                              |==================                                                    |  25%  |                                                                              |=====================                                                 |  30%  |                                                                              |========================                                              |  35%  |                                                                              |============================                                          |  40%  |                                                                              |================================                                      |  45%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  55%  |                                                                              |==========================================                            |  60%  |                                                                              |==============================================                        |  65%  |                                                                              |=================================================                     |  70%  |                                                                              |====================================================                  |  75%  |                                                                              |========================================================              |  80%  |                                                                              |============================================================          |  85%  |                                                                              |===============================================================       |  90%  |                                                                              |==================================================================    |  95%  |                                                                              |======================================================================| 100%
+Rescaling group 4
+Scaling data matrix
+  |                                                                              |                                                                      |   0%  |                                                                              |====                                                                  |   5%  |                                                                              |=======                                                               |  10%  |                                                                              |==========                                                            |  15%  |                                                                              |==============                                                        |  20%  |                                                                              |==================                                                    |  25%  |                                                                              |=====================                                                 |  30%  |                                                                              |========================                                              |  35%  |                                                                              |============================                                          |  40%  |                                                                              |================================                                      |  45%  |                                                                              |===================================                                   |  50%  |                                                                              |======================================                                |  55%  |                                                                              |==========================================                            |  60%  |                                                                              |==============================================                        |  65%  |                                                                              |=================================================                     |  70%  |                                                                              |====================================================                  |  75%  |                                                                              |========================================================              |  80%  |                                                                              |============================================================          |  85%  |                                                                              |===============================================================       |  90%  |                                                                              |==================================================================    |  95%  |                                                                              |======================================================================| 100%
+Aligning dimension 1
+Aligning dimension 1
+Aligning dimension 1
+Aligning dimension 2
+Aligning dimension 2
+Aligning dimension 2
+Aligning dimension 3
+Aligning dimension 3
+Aligning dimension 3
+Aligning dimension 4
+Aligning dimension 4
+Aligning dimension 4
+Aligning dimension 5
+Aligning dimension 5
+Aligning dimension 5
+Aligning dimension 6
+Aligning dimension 6
+Aligning dimension 6
+Aligning dimension 7
+Aligning dimension 7
+Aligning dimension 7
+Aligning dimension 8
+Aligning dimension 8
+Aligning dimension 8
+Aligning dimension 9
+Aligning dimension 9
+Aligning dimension 9
+Aligning dimension 10
+Aligning dimension 10
+Aligning dimension 10
+Aligning dimension 11
+Aligning dimension 11
+Aligning dimension 11
+Aligning dimension 12
+Aligning dimension 12
+Aligning dimension 12
+Aligning dimension 13
+Aligning dimension 13
+Aligning dimension 13
+Aligning dimension 14
+Aligning dimension 14
+Aligning dimension 14
+Aligning dimension 15
+Aligning dimension 15
+Aligning dimension 15
+Aligning dimension 16
+Aligning dimension 16
+Aligning dimension 16
+Aligning dimension 17
+Aligning dimension 17
+Aligning dimension 17
+Aligning dimension 18
+Aligning dimension 18
+Aligning dimension 18
+Aligning dimension 19
+Aligning dimension 19
+Aligning dimension 19
+Aligning dimension 20
+Aligning dimension 20
+Aligning dimension 20
+Aligning dimension 21
+Aligning dimension 21
+Aligning dimension 21
+Aligning dimension 22
+Aligning dimension 22
+Aligning dimension 22
+Aligning dimension 23
+Aligning dimension 23
+Aligning dimension 23
+Aligning dimension 24
+Aligning dimension 24
+Aligning dimension 24
+Aligning dimension 25
+Aligning dimension 25
+Aligning dimension 25
+Aligning dimension 26
+Aligning dimension 26
+Aligning dimension 26
+Saving 7 x 7 in image
+Saving 7 x 7 in image
+Saving 7 x 7 in image
+Saving 7 x 7 in image
+Saving 7 x 7 in image
+Saving 7 x 7 in image
+Saving 7 x 7 in image
+Saving 7 x 7 in image
+Saving 7 x 7 in image
+Saving 7 x 7 in image
+Saving 7 x 7 in image
+Saving 7 x 7 in image
+Computing nearest neighbor graph
+Computing SNN
+Error in RunModularityClusteringCpp(SNN, modularity, resolution, algorithm,  : 
+  Not compatible with requested type: [type=character; target=double].
+Calls: FindClusters ... RunModularityClustering -> RunModularityClusteringCpp
+Execution halted
+Loading required package: ggplot2
+Loading required package: cowplot
+
+Attaching package: ‘cowplot’
+
+The following object is masked from ‘package:ggplot2’:
+
+    ggsave
+
+Loading required package: Matrix
+Error in setwd(inputFilePath) : cannot change working directory
+Execution halted

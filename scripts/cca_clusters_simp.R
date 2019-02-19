@@ -3,25 +3,24 @@
 # Pipeline to run Seurat setup for mouse scRNA-Seq data - with CCA
 # This takes in a matrix with CCAs calculated, adjusts them, makes a tSNE, 
 # and visualizes/counts clusters.
-
-# Load needed library
-#install.packages('Seurat')
+# SIMPLER VERSION WITH NO PICTURES TO TRY AND TROUBLESHOOT THE FINDCLUSTERS ERROR
 
 # Set up workspace
-print('Run CCA Track: clusters.R')
+print('Run CCA Track: clusters_simp.R')
 print('Setting up workspace...')
 ## Load older version of Seurat which has the functions I need
 library('Seurat', lib.loc='/scg/apps/software/r/3.5.0/scg/seurat_2.3')
+print('Package Version of Seurat:')
 packageVersion('Seurat')
 
 ## import from command line
 args <- commandArgs(TRUE)
 #load(args[1])
-inputFilePath <- args[1]
+inputFile <- args[1]
 outputDir <- args[2]
 chosen_cc <- args[3]
 chosen_res <- args[4]
-print(paste0('Importing files from: ', inputFilePath))
+print(paste0('Importing files : ', inputFile))
 print(paste0('Output location: ', outputDir))
 print(paste0('Chosen # of CCs: ', chosen_cc))
 
@@ -29,12 +28,11 @@ print(paste0('Chosen # of CCs: ', chosen_cc))
 ## load needed files
 print('~*~')
 print('Loading needed files...')
-setwd(inputFilePath)
-load('data.combined_multiCCA_metadata.RData')
+load(inputFile)
 
 ## make subdirectory
 setwd(outputDir)
-subDir <- 'clusters_findClustBeforeVis'
+subDir <- 'clusters_simp'
 print(paste0('Name of Experiment: ', subDir))
 
 if (file.exists(subDir)){
@@ -53,38 +51,11 @@ print('Align CCA subspaces...')
 print(paste0('System time: ', Sys.time()))
 
 myGroupingVar = "stim"
-
 data.combined <- AlignSubspace(data.combined, reduction.type = "cca", grouping.var = myGroupingVar,  dims.align = 1:chosen_cc)
 
 print('Saving aligned subspaces...')
-setwd(paste0(outputDir, subDir))
-save(data.combined, file = paste0('data.combined_aligned_groupby_', myGroupingVar, '_cc_', chosen_cc, '.RData') )
-
-
-## visualize results of CCA plot CC1 versus CC2 and look at a violin plot
-print('Making visualizations of CCA results post-CC alignment...')
-### Function
-visResultsCCA <- function(data.combined, myGroup){
-    p1 <- DimPlot(object = data.combined, reduction.use = "cca", group.by = myGroup,
-    pt.size = 0.5, do.return = TRUE)
-
-    p2 <- VlnPlot(object = data.combined, features.plot = "CC1", group.by = myGroup,
-    do.return = TRUE)
-
-    # save method 2
-    ggsave(file = paste0('CCA_DimPlot_', myGroup, '.pdf'), plot = p1, device='pdf')
-    ggsave(file = paste0('CCA_VlnPlot_', myGroup, '.pdf'), plot = p2, device='pdf')
-}
-
-### Deploy
-visResultsCCA(data.combined, "stim")
-visResultsCCA(data.combined, "Litter")
-visResultsCCA(data.combined, "CellsPerSample")
-visResultsCCA(data.combined, "SurgeryDate")
-visResultsCCA(data.combined, "Condition")
-visResultsCCA(data.combined, "Genotype")
-
-
+#setwd(paste0(outputDir, subDir))
+#save(data.combined, file = paste0('data.combined_aligned_groupby_', myGroupingVar, '_cc_', chosen_cc, '.RData') )
 
 # Run integrated analysis on all cells
 print('~*~')
@@ -97,35 +68,17 @@ print('Making tSNE...')
 print(paste0('System time: ', Sys.time()))
 data.combined <- RunTSNE(data.combined, reduction.use = "cca.aligned", dims.use = 1:chosen_cc, do.fast = T)
 
-save(data.combined, file= paste0('data.combined_withTSNE_r', chosen_res, '_CC', chosen_cc, '.RData') )
+#save(data.combined, file= paste0('data.combined_withTSNE_r', chosen_res, '_CC', chosen_cc, '.RData') )
 
-
-
-
-# # !!! FOR TROUBLESHOOTING PURPOSES START FROM HERE
-# # 2.18 3.20 getting 'dimensional reduction has not been computed' error
-# print('CUT TO THE CHASE -- we need to figure out how to cluster...')
-# #paste0(outputDir, subDir, '/data.combined_aligned_groupby_stim_cc_26.RData')
-# paste0(outputDir, subDir, '/data.combined_withTSNE_r1.2_CC26.RData')
-# load(paste0(outputDir, subDir, '/data.combined_withTSNE_r1.2_CC26.RData'))
-# 
 ## make clusters
 print('Finding clusters...')
 print(paste0('System time: ', Sys.time()))
-#options(scipen=999) # because data.combined so large! https://github.com/satijalab/seurat/issues/166
-# 
-# #print('Make Sparse...')
-# #data.combined <- MakeSparse(object = data.combined) # should I put this much earlier, e.g. before all teh CCs get made?
-# 
-# 
 
 data.combined <- FindClusters(data.combined, reduction.type = "cca.aligned", resolution = chosen_res, dims.use = 1:chosen_cc, nn.eps = 0.5) # the problem line
 save(data.combined, file= paste0('data.combined_withClust_r', chosen_res, '_CC', chosen_cc, '.RData') )
 
-# #data.combined <- FindClusters(data.combined, reduction.type = "cca", resolution = chosen_res, dims.use = 1:chosen_cc)
-# #data.combined <- FindClusters(data.combined, resolution = chosen_res, dims.use = 1:chosen_cc)
 
-### Function to visualize tSNE
+## Function to visualize tSNE
 visTSNE <- function(data.combined, myGroup){
   
   p3 <- TSNEPlot(data.combined, do.return = T, pt.size = 0.5, group.by = myGroup)

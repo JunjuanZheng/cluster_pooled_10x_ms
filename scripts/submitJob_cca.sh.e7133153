@@ -8,7 +8,3 @@ The following object is masked from ‘package:ggplot2’:
     ggsave
 
 Loading required package: Matrix
-Error in paste0("Importing files from: ", fileLoc) : 
-  object 'fileLoc' not found
-Calls: print -> paste0
-Execution halted

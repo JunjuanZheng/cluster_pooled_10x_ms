@@ -17,7 +17,7 @@ packageVersion('Seurat')
 args <- commandArgs(TRUE)
 #load(args[1])
 fileLoc <- paste0(args[1], 'makeVars')
-outputDir <- args[1]
+outputDir <- args[2]
 print(paste0('Importing files from: ', fileLoc))
 print(paste0('Output location: ', outputDir))
 
@@ -29,7 +29,7 @@ load('allVars.RData')
 
 ## make subdirectory
 setwd(outputDir)
-subDir <- 'ccaAndTSNE_sampleCol_runWith45'
+subDir <- 'ccaAndTSNE_runWith100'
 
 if (file.exists(subDir)){
     setwd(file.path(outputDir, subDir))
@@ -72,7 +72,7 @@ het.sal@meta.data$sample <- het.sal@meta.data$orig.ident
 het.lps@meta.data$sample <- het.lps@meta.data$orig.ident
 
 
-m# Run Canonical Correlation Analysis
+# Run Canonical Correlation Analysis
 print('~*~')
 print('Running Canonical Correlation Analysis...')
 print(paste0('System time: ', Sys.time()))
@@ -85,7 +85,9 @@ cellIDs <- c('WT.SAL', 'WT.LPS', 'HET.SAL', 'HET.LPS')
 head(wt.sal@meta.data)
 head(x = wt.sal@cell.names)
 
-data.combined <- RunMultiCCA(objects, genes.use = genes.use, num.ccs = 45, add.cell.ids = cellIDs)
+numCCs = 100 # number of CCs to plot and run
+
+data.combined <- RunMultiCCA(objects, genes.use = genes.use, num.ccs = numCCs, add.cell.ids = cellIDs)
 
 head(data.combined@meta.data)
 head(x = data.combined@cell.names)
@@ -162,19 +164,19 @@ print('Making graphs to choose which CCs to use...')
 print(paste0('System time: ', Sys.time()))
 ## bicor plot - when do we see a dropoff in signal/when does change in x not account for large change in y?
 
-makeBicorPlot <- function(data.combined, myGroup){
-    p3 <- MetageneBicorPlot(data.combined, grouping.var = myGroup, dims.eval = 1:30, 
+makeBicorPlot <- function(data.combined, myGroup, numCCs){
+    p3 <- MetageneBicorPlot(data.combined, grouping.var = myGroup, dims.eval = 1:numCCs, 
     display.progress = FALSE)
     
     ggsave(file = paste0('bicorPlot_', myGroup, '.pdf'), plot = p3, device='pdf')
 }
 
-makeBicorPlot(data.combined, "stim")
-makeBicorPlot(data.combined, "Litter")
-makeBicorPlot(data.combined, "CellsPerSample") #!
-makeBicorPlot(data.combined, "SurgeryDate")
-makeBicorPlot(data.combined, "Condition")
-makeBicorPlot(data.combined, "Genotype")
+makeBicorPlot(data.combined, "stim", numCCs)
+makeBicorPlot(data.combined, "Litter", numCCs)
+makeBicorPlot(data.combined, "CellsPerSample", numCCs)
+makeBicorPlot(data.combined, "SurgeryDate", numCCs)
+makeBicorPlot(data.combined, "Condition", numCCs)
+makeBicorPlot(data.combined, "Genotype", numCCs)
 
 ## heatmap to assess which components are actually important?
 pdf(file = 'dimHeatmap_1_9.pdf')
@@ -188,6 +190,15 @@ dev.off()
 pdf(file = 'dimHeatmap_20_29.pdf')
 DimHeatmap(object = data.combined, reduction.type = "cca", cells.use = 500, dim.use = 20:29, do.balanced = TRUE)
 dev.off()
+
+pdf(file = 'dimHeatmap_30_39.pdf')
+DimHeatmap(object = data.combined, reduction.type = "cca", cells.use = 500, dim.use = 30:39, do.balanced = TRUE)
+dev.off()
+
+pdf(file = 'dimHeatmap_40_49.pdf')
+DimHeatmap(object = data.combined, reduction.type = "cca", cells.use = 500, dim.use = 40:49, do.balanced = TRUE)
+dev.off()
+
 
 
 # save variables
