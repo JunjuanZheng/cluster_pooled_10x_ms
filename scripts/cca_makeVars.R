@@ -68,6 +68,7 @@ myCondSeurat <- function(filenames, mtxPath, condName, files){
   print(paste0('Making initial Seurat object with ', filenames[1], '...'))
   initialData <- Read10X(data.dir = paste0(mtxPath, '/', filenames[1], '/mm10/') )
   data <- CreateSeuratObject(raw.data = initialData, project = condName, min.cells = 3, min.features=200, names.field = files_relevant[1,2])
+  data <- MakeSparse(object = data) # make it sparse !!!!! NEW ADDITION FOR THIS RUN 2.19
   data@meta.data$orig.ident <- files_relevant[1,'ids'] 
   
   # now merge with the others
@@ -77,6 +78,7 @@ myCondSeurat <- function(filenames, mtxPath, condName, files){
     addingData <- Read10X(data.dir = paste0(mtxPath, '/', filenames[i], '/mm10/') )
     print(paste0('Reading in data from ',mtxPath, '/', filenames[i],'...'))
     addingData_obj <- CreateSeuratObject(raw.data = addingData, project = condName, min.cells = 3, min.features=200) # create object
+    addingData_obj <- MakeSparse(object = addingData_obj) # make it sparse !!! NEW ADDITION FOR THIS RUN 2.19
     addingData_obj@meta.data$orig.ident <- files_relevant[i,'ids']
 
     # merge this new seurat object with existing data

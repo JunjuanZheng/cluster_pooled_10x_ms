@@ -14,24 +14,22 @@ print('Loading needed files...')
 args <- commandArgs(TRUE) # load in arguments that accompanied script
 mainDir <- args[1]
 setwd(mainDir)
-setwd('RData')
-load('data_combined_pca.RData') # load combined data
-load('metadataFiles.RData') # load combined data
-load('hv_genes.RData') # load combined data
-setwd('..')
+load(file.path(mainDir, 'runPCA/data_combined_pca.RData')) # load combined data
+load(file.path(mainDir, 'metadataFiles.RData')) 
+load(file.path(mainDir, 'hv_genes.RData')) 
 
 data.combined <- data.combined.pca # rename this variable since it's the one we'll use from now on
 
 
 # Create container folder for output of this script
 subDir <- 'runClustering_pc26_r1p2'
+print(paste0('Output files to:', file.path(mainDir, subDir) ))
 
 if (file.exists(subDir)){
     setwd(file.path(mainDir, subDir))
 } else {
     dir.create(file.path(mainDir, subDir))
     setwd(file.path(mainDir, subDir))
-
 }
 
 

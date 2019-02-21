@@ -1,0 +1,219 @@
+[1] ‘2.3.4’
+[1] "Run CCA Track: cca_makeVars.R"
+[1] "Mtx File location: /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData"
+[1] "Metadata location: /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/metadata/20190211_sampleTable.csv"
+[1] "Output location: /scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/"
+[1] "Example file location:"
+[1] "/labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/E_filtered_gene_bc_matrices/mm10/"
+[1] "~*~"
+[1] "Working on WT.SAL"
+                       filenames ids
+4    H_filtered_gene_bc_matrices   H
+5    I_filtered_gene_bc_matrices   I
+11 KM2_filtered_gene_bc_matrices KM2
+13   M_filtered_gene_bc_matrices   M
+[1] "Making initial Seurat object with H_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/I_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from I_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/KM2_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from KM2_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/M_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from M_filtered_gene_bc_matrices..."
+[1] "~*~"
+[1] "Working on WT.LPS"
+                        filenames  ids
+2     F_filtered_gene_bc_matrices    F
+7     K_filtered_gene_bc_matrices    K
+9  KM13_filtered_gene_bc_matrices KM13
+14    N_filtered_gene_bc_matrices    N
+[1] "Making initial Seurat object with F_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/K_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from K_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/KM13_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from KM13_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/N_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from N_filtered_gene_bc_matrices..."
+[1] "~*~"
+[1] "Working on HET.SAL"
+                       filenames ids
+1    E_filtered_gene_bc_matrices   E
+6    J_filtered_gene_bc_matrices   J
+8  KM1_filtered_gene_bc_matrices KM1
+15   O_filtered_gene_bc_matrices   O
+[1] "Making initial Seurat object with E_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/J_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from J_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/KM1_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from KM1_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/O_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from O_filtered_gene_bc_matrices..."
+[1] "~*~"
+[1] "Working on HET.LPS"
+                        filenames  ids
+3     G_filtered_gene_bc_matrices    G
+10 KM18_filtered_gene_bc_matrices KM18
+12    L_filtered_gene_bc_matrices    L
+16    P_filtered_gene_bc_matrices    P
+[1] "Making initial Seurat object with G_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/KM18_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from KM18_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/L_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from L_filtered_gene_bc_matrices..."
+[1] "Reading in data from /labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData/P_filtered_gene_bc_matrices..."
+[1] "Merging Seurat data with data from P_filtered_gene_bc_matrices..."
+
+   H    I  KM2    M 
+6666 1162 1381 7988 
+
+   F    K KM13    N 
+7606 1209 1400 7540 
+
+   E    J  KM1    O 
+8935  861 1453 6565 
+
+   G KM18    L    P 
+8216 1098  897 8193 
+[1] "~*~ All done! ~*~"
+[1] "Run CCA Track: calcCCA.R"
+[1] "Setting up workspace..."
+[1] ‘2.3.4’
+[1] "Importing files from: /scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/makeVars"
+[1] "Output location: /scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/"
+[1] "~*~"
+[1] "Loading needed files..."
+[1] "~*~"
+[1] "Figuring out what genes should be inputs to CCA..."
+[1] "System time: 2019-02-19 10:50:14"
+[1] "Highly variable genes:"
+[1] "~*~"
+[1] "Running Canonical Correlation Analysis..."
+[1] "System time: 2019-02-19 10:51:05"
+                 nGene  nUMI orig.ident   stim sample
+AAACCTGAGACACGAC  4099 15891          H WT.SAL      H
+AAACCTGAGGAATCGC  5066 21944          H WT.SAL      H
+AAACCTGAGTGAACAT  4206 14681          H WT.SAL      H
+AAACCTGCAACAACCT  5140 24872          H WT.SAL      H
+AAACCTGCACAGTCGC  4150 13165          H WT.SAL      H
+AAACCTGCACCAGGTC  4324 16199          H WT.SAL      H
+[1] "AAACCTGAGACACGAC" "AAACCTGAGGAATCGC" "AAACCTGAGTGAACAT" "AAACCTGCAACAACCT"
+[5] "AAACCTGCACAGTCGC" "AAACCTGCACCAGGTC"
+[1] "Computing CC 1"
+[1] "Computing CC 2"
+[1] "Computing CC 3"
+[1] "Computing CC 4"
+[1] "Computing CC 5"
+[1] "Computing CC 6"
+[1] "Computing CC 7"
+[1] "Computing CC 8"
+[1] "Computing CC 9"
+[1] "Computing CC 10"
+[1] "Computing CC 11"
+[1] "Computing CC 12"
+[1] "Computing CC 13"
+[1] "Computing CC 14"
+[1] "Computing CC 15"
+[1] "Computing CC 16"
+[1] "Computing CC 17"
+[1] "Computing CC 18"
+[1] "Computing CC 19"
+[1] "Computing CC 20"
+[1] "Computing CC 21"
+[1] "Computing CC 22"
+[1] "Computing CC 23"
+[1] "Computing CC 24"
+[1] "Computing CC 25"
+[1] "Computing CC 26"
+[1] "Computing CC 27"
+[1] "Computing CC 28"
+[1] "Computing CC 29"
+[1] "Computing CC 30"
+[1] "Computing CC 31"
+[1] "Computing CC 32"
+[1] "Computing CC 33"
+[1] "Computing CC 34"
+[1] "Computing CC 35"
+[1] "Computing CC 36"
+[1] "Computing CC 37"
+[1] "Computing CC 38"
+[1] "Computing CC 39"
+[1] "Computing CC 40"
+[1] "Computing CC 41"
+[1] "Computing CC 42"
+[1] "Computing CC 43"
+[1] "Computing CC 44"
+[1] "Computing CC 45"
+[1] "Computing CC 46"
+[1] "Computing CC 47"
+[1] "Computing CC 48"
+[1] "Computing CC 49"
+[1] "Computing CC 50"
+[1] "Computing CC 51"
+[1] "Computing CC 52"
+[1] "Computing CC 53"
+[1] "Computing CC 54"
+[1] "Computing CC 55"
+[1] "Computing CC 56"
+[1] "Computing CC 57"
+[1] "Computing CC 58"
+[1] "Computing CC 59"
+[1] "Computing CC 60"
+[1] "Computing CC 61"
+[1] "Computing CC 62"
+[1] "Computing CC 63"
+[1] "Computing CC 64"
+[1] "Computing CC 65"
+[1] "Computing CC 66"
+[1] "Computing CC 67"
+[1] "Computing CC 68"
+[1] "Computing CC 69"
+[1] "Computing CC 70"
+[1] "Computing CC 71"
+[1] "Computing CC 72"
+[1] "Computing CC 73"
+[1] "Computing CC 74"
+[1] "Computing CC 75"
+[1] "Computing CC 76"
+[1] "Computing CC 77"
+[1] "Computing CC 78"
+[1] "Computing CC 79"
+[1] "Computing CC 80"
+[1] "Computing CC 81"
+[1] "Computing CC 82"
+[1] "Computing CC 83"
+[1] "Computing CC 84"
+[1] "Computing CC 85"
+[1] "Computing CC 86"
+[1] "Computing CC 87"
+[1] "Computing CC 88"
+[1] "Computing CC 89"
+[1] "Computing CC 90"
+[1] "Computing CC 91"
+[1] "Computing CC 92"
+[1] "Computing CC 93"
+[1] "Computing CC 94"
+[1] "Computing CC 95"
+[1] "Computing CC 96"
+[1] "Computing CC 97"
+[1] "Computing CC 98"
+[1] "Computing CC 99"
+[1] "Computing CC 100"
+                        nGene  nUMI orig.ident   stim sample
+WT.SAL_AAACCTGAGACACGAC  4099 15891     WT.SAL WT.SAL      H
+WT.SAL_AAACCTGAGGAATCGC  5066 21944     WT.SAL WT.SAL      H
+WT.SAL_AAACCTGAGTGAACAT  4206 14681     WT.SAL WT.SAL      H
+WT.SAL_AAACCTGCAACAACCT  5140 24872     WT.SAL WT.SAL      H
+WT.SAL_AAACCTGCACAGTCGC  4150 13165     WT.SAL WT.SAL      H
+WT.SAL_AAACCTGCACCAGGTC  4324 16199     WT.SAL WT.SAL      H
+[1] "WT.SAL_AAACCTGAGACACGAC" "WT.SAL_AAACCTGAGGAATCGC"
+[3] "WT.SAL_AAACCTGAGTGAACAT" "WT.SAL_AAACCTGCAACAACCT"
+[5] "WT.SAL_AAACCTGCACAGTCGC" "WT.SAL_AAACCTGCACCAGGTC"
+
+HET.LPS HET.SAL  WT.LPS  WT.SAL 
+  18404   17814   17755   17197 
+[1] "Directory should be /scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/calcCCA"
+[1] "~*~"
+[1] "Adding my metadata to Seurat..."
+[1] "Making visualizations of CCA results..."
+[1] "~*~"
+[1] "Making graphs to choose which CCs to use..."
+[1] "System time: 2019-02-20 11:04:37"

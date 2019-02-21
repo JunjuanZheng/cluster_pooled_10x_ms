@@ -10,8 +10,8 @@ packageVersion('Seurat')
 print('Run Regular Track: runPCA.R')
 print('Loading needed files...')
 args <- commandArgs(TRUE) # load in arguments that accompanied script
-setwd(args[1])
-setwd('RData')
+mainDir <- args[1]
+setwd(mainDir)
 load('data_combined_normAndScale.RData') # load combined data
 load('metadataFiles.RData') # load combined data
 load('hv_genes.RData') # load combined data
@@ -21,7 +21,7 @@ data.combined <- data.combined.normAndScale # rename this variable since it's th
 
 
 # Create container folder for output of	    this script
-subdir <- 'PCA'
+subDir <- 'runPCA'
 
 if (file.exists(subDir)){
     setwd(file.path(mainDir, subDir))
@@ -31,10 +31,11 @@ if (file.exists(subDir)){
 
 }
 
+print(paste0('SubDir Is: ', file.path(mainDir, subDir)))
+
 
 # Run Principal Components Analysis
 ## adapted for large datasets - just use hv.genes. Computing many PCs because default (20) doesn't seem enough
-setwd(subdir)
 
 print('Running PCAs...')
 data.combined <- RunPCA(object = data.combined, pc.genes = hv.genes, do.print = TRUE, pcs.print = 1:10, genes.print = 5, pcs.compute = 40)
@@ -77,7 +78,6 @@ makePCAPic <- function(seuratObject, identVar, dim1, dim2, myTitle){
 }
 
 print('Generating PCA plots for various possible batch effects...')
-setwd(args[1])
 makePCAPic(data.combined, 'orig.ident', 1, 2, 'testDataPCA_pc1_pc2_origIdent.pdf')
 makePCAPic(data.combined, 'Litter', 1, 2, 'testDataPCA_pc1_pc2_Litter.pdf')
 makePCAPic(data.combined, 'Genotype', 1, 2, 'testDataPCA_pc1_pc2_Genotype.pdf')
@@ -105,7 +105,6 @@ makeDendrogramPic <- function(seuratObject, identVar, pcs, myTitle){
 
 ## deploy
 print('Generating Dendrograms for various possible batch effects...')
-setwd(args[1])
 makeDendrogramPic(data.combined, 'Condition', c(1:36), 'clusterTestData_Condition.pdf') # Condition
 makeDendrogramPic(data.combined, 'Genotype', c(1:36), 'clusterTestData_Genotype.pdf') # Genotype
 makeDendrogramPic(data.combined, 'Litter', c(1:36), 'clusterTestData_Litter.pdf') # Genotype
@@ -141,7 +140,6 @@ dev.off()
 
 
 #Save variables
-setwd('../RData')
 data.combined.pca <- data.combined
 save(data.combined.pca, file='data_combined_pca.RData')
 

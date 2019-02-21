@@ -53,7 +53,6 @@ print('Align CCA subspaces...')
 print(paste0('System time: ', Sys.time()))
 
 myGroupingVar = "stim"
-
 data.combined <- AlignSubspace(data.combined, reduction.type = "cca", grouping.var = myGroupingVar,  dims.align = 1:chosen_cc)
 
 print('Saving aligned subspaces...')

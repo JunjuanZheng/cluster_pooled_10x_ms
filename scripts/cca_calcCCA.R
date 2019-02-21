@@ -7,7 +7,7 @@
 #install.packages('Seurat')
 
 # Set up workspace
-print('Run CCA Track: ccaAndTSNE.R')
+print('Run CCA Track: calcCCA.R')
 print('Setting up workspace...')
 ## Load older version of Seurat which has the functions I need
 library('Seurat', lib.loc='/scg/apps/software/r/3.5.0/scg/seurat_2.3')
@@ -29,7 +29,7 @@ load('allVars.RData')
 
 ## make subdirectory
 setwd(outputDir)
-subDir <- 'ccaAndTSNE_runWith100'
+subDir <- 'calcCCA'
 
 if (file.exists(subDir)){
     setwd(file.path(outputDir, subDir))
@@ -125,10 +125,10 @@ save(data.combined, file = paste0("data.combined_multiCCA_metadata.RData")) # sa
 
 
 
-# If you already ran the above - load the data and start from here
-setwd(file.path(outputDir, subDir))
-load('data.combined_multiCCA.RData')
-load('data.combined_multiCCA_metadata.RData')
+## If you already ran the above - load the data and start from here
+#setwd(file.path(outputDir, subDir))
+#load('data.combined_multiCCA.RData')
+#load('data.combined_multiCCA_metadata.RData')
 
           
           

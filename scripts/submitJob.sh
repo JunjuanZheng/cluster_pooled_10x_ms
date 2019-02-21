@@ -13,10 +13,10 @@ module load r/3.5.0
 
 # Run R Script
 ## Order of variables: (1)Folder containin .mtx data from 10x, (2)Output file, (3) Metadata .csv
-Rscript runBigScaleData.R $MTX_16p_SC_MS $OUTPUT_16p/201901_cluster_pooled_10x_ms/standard/20190214 $METADAT_16p_SC_MS
+#Rscript old/regular/runBigScaleData.R $MTX_16p_SC_MS $OUTPUT_16p/201901_cluster_pooled_10x_ms/standard/20190218 $METADAT_16p_SC_MS
 
 ## PCA script. Order of variables: (1) Output file
-Rscript runPCA.R $OUTPUT_16p/201901_cluster_pooled_10x_ms/standard/20190214
+#Rscript old/regular/runPCA.R $OUTPUT_16p/201901_cluster_pooled_10x_ms/standard/20190218
 
 ## Clustering script. Order of variables: (1) Output file    
-Rscript runClustering.R $OUTPUT_16p/201901_cluster_pooled_10x_ms/standard/20190214
+Rscript old/regular/runClustering.R $OUTPUT_16p/201901_cluster_pooled_10x_ms/standard/20190218
