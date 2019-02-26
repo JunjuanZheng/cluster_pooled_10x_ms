@@ -85,7 +85,7 @@ cellIDs <- c('WT.SAL', 'WT.LPS', 'HET.SAL', 'HET.LPS')
 head(wt.sal@meta.data)
 head(x = wt.sal@cell.names)
 
-numCCs = 100 # number of CCs to plot and run
+numCCs = 75 # number of CCs to plot and run
 
 data.combined <- RunMultiCCA(objects, genes.use = genes.use, num.ccs = numCCs, add.cell.ids = cellIDs)
 
