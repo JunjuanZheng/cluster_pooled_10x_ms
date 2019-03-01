@@ -9,6 +9,9 @@
 library('Seurat', lib.loc='/scg/apps/software/r/3.5.0/scg/seurat_2.3')
 packageVersion('Seurat')
 
+# Load cell IDs for demultiplexing samples
+allNewID_cells <- read.csv("/scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/20190226_sexLabel/allNewID_cells.csv")
+
 # import from command line
 args <- commandArgs(TRUE)
 #load(args[1])
