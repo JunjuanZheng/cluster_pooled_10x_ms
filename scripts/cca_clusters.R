@@ -6,7 +6,7 @@
 # SIMPLER VERSION WITH NO PICTURES TO TRY AND TROUBLESHOOT THE FINDCLUSTERS ERROR
 
 # Set up workspace
-print('Run CCA Track: clusters_simp.R')
+print('Run CCA Track: clusters.R')
 print('Setting up workspace...')
 ## Load older version of Seurat which has the functions I need
 library('Seurat', lib.loc='/scg/apps/software/r/3.5.0/scg/seurat_2.3')
@@ -33,7 +33,7 @@ load(inputFile)
 
 ## make subdirectory
 setwd(outputDir)
-subDir <- 'clusters_simp'
+subDir <- 'clusters'
 print(paste0('Name of Experiment: ', subDir))
 
 if (file.exists(subDir)){
@@ -45,86 +45,86 @@ if (file.exists(subDir)){
 
 setwd(paste0(outputDir, subDir))
 
-# 
-# # Align CCA subspaces
-# print('~*~')
-# print('Align CCA subspaces...')
-# print(paste0('System time: ', Sys.time()))
-# 
-# myGroupingVar = "stim"
-# data.combined <- AlignSubspace(data.combined, reduction.type = "cca", grouping.var = myGroupingVar,  dims.align = 1:chosen_cc)
-# 
-# print('Saving aligned subspaces...')
-# save(data.combined, file = paste0('data.combined_aligned_groupby_', myGroupingVar, '_cc_', chosen_cc, '.RData') )
-# 
-# ## visualize results of CCA plot CC1 versus CC2 and look at a violin plot
-# print('Making visualizations of CCA results post-CC alignment...')
-# ### Function
-# visResultsCCA <- function(data.combined, myGroup){
-#   p1 <- DimPlot(object = data.combined, reduction.use = "cca", group.by = myGroup,
-#                 pt.size = 0.5, do.return = TRUE)
-# 
-#   p2 <- VlnPlot(object = data.combined, features.plot = "CC1", group.by = myGroup,
-#                 do.return = TRUE)
-# 
-#   # save method 2
-#   ggsave(file = paste0('CCA_DimPlot_', myGroup, '.pdf'), plot = p1, device='pdf')
-#   ggsave(file = paste0('CCA_VlnPlot_', myGroup, '.pdf'), plot = p2, device='pdf')
-# }
-# 
-# ### Deploy
-# visResultsCCA(data.combined, "stim")
-# visResultsCCA(data.combined, "Litter")
-# visResultsCCA(data.combined, "CellsPerSample")
-# visResultsCCA(data.combined, "SurgeryDate")
-# visResultsCCA(data.combined, "Condition")
-# visResultsCCA(data.combined, "Genotype")
-# 
-# 
-# 
-# # Run integrated analysis on all cells
-# print('~*~')
-# print('Run integrated analysis...')
-# print(paste0('System time: ', Sys.time()))
-# 
-# ## make tSNE
-# ### t-SNE and Clustering - NOTE USE OF 'REDUCTION.USE'
-# print('Making tSNE...')
-# print(paste0('System time: ', Sys.time()))
-# data.combined <- RunTSNE(data.combined, reduction.use = "cca.aligned", dims.use = 1:chosen_cc, do.fast = T)
-# 
-# save(data.combined, file= paste0('data.combined_withTSNE_r', chosen_res, '_CC', chosen_cc, '.RData') )
-# 
-# ## make clusters
-# print('Finding clusters...')
-# print(paste0('System time: ', Sys.time()))
-# 
-# data.combined <- FindClusters(data.combined, reduction.type = "cca.aligned", resolution = as.numeric(chosen_res), dims.use = 1:chosen_cc, nn.eps = 0.5) # the problem line
-# save(data.combined, file= paste0('data.combined_withClust_r', chosen_res, '_CC', chosen_cc, '.RData') )
-# 
-# 
-# ## Function to visualize tSNE
-# visTSNE <- function(data.combined, myGroup){
-# 
-#   p3 <- TSNEPlot(data.combined, do.return = T, pt.size = 0.5, group.by = myGroup)
-# 
-#   # save output
-#   ggsave(file = paste0( 'tSNE_group_', myGroup, '_res', chosen_res, '_CC', chosen_cc, '.pdf' ), plot = p3, device='pdf')
-# }
-# 
-# visTSNE(data.combined, "stim")
-# visTSNE(data.combined, "Litter")
-# visTSNE(data.combined, "CellsPerSample")
-# visTSNE(data.combined, "SurgeryDate")
-# visTSNE(data.combined, "Condition")
-# visTSNE(data.combined, "Genotype")
-# 
-# ## Visualize tSNE but with clusters
-# p2 <- TSNEPlot(data.combined, do.label = T, do.return = T, pt.size = 0.5)
-# ggsave(file = paste0( 'tSNE_clusters_res', chosen_res, '_CC', chosen_cc, '.pdf' ), plot = p2, device='pdf')
 
-# !! START FROM HERE TO TROUBLESHOOT TALLY
-load(file.path(outputDir, subDir, 'data.combined_withClust_r1.2_CC40.RData'))
+# Align CCA subspaces
+print('~*~')
+print('Align CCA subspaces...')
+print(paste0('System time: ', Sys.time()))
+
+myGroupingVar = "stim"
+data.combined <- AlignSubspace(data.combined, reduction.type = "cca", grouping.var = myGroupingVar,  dims.align = 1:chosen_cc)
+
+print('Saving aligned subspaces...')
+save(data.combined, file = paste0('data.combined_aligned_groupby_', myGroupingVar, '_cc_', chosen_cc, '.RData') )
+
+## visualize results of CCA plot CC1 versus CC2 and look at a violin plot
+print('Making visualizations of CCA results post-CC alignment...')
+### Function
+visResultsCCA <- function(data.combined, myGroup){
+  p1 <- DimPlot(object = data.combined, reduction.use = "cca", group.by = myGroup,
+                pt.size = 0.5, do.return = TRUE)
+
+  p2 <- VlnPlot(object = data.combined, features.plot = "CC1", group.by = myGroup,
+                do.return = TRUE)
+
+  # save method 2
+  ggsave(file = paste0('CCA_DimPlot_', myGroup, '.pdf'), plot = p1, device='pdf')
+  ggsave(file = paste0('CCA_VlnPlot_', myGroup, '.pdf'), plot = p2, device='pdf')
+}
+
+### Deploy
+visResultsCCA(data.combined, "stim")
+visResultsCCA(data.combined, "Litter")
+visResultsCCA(data.combined, "CellsPerSample")
+visResultsCCA(data.combined, "SurgeryDate")
+visResultsCCA(data.combined, "Condition")
+visResultsCCA(data.combined, "Genotype")
+
+
+
+# Run integrated analysis on all cells
+print('~*~')
+print('Run integrated analysis...')
+print(paste0('System time: ', Sys.time()))
+
+## make tSNE
+### t-SNE and Clustering - NOTE USE OF 'REDUCTION.USE'
+print('Making tSNE...')
+print(paste0('System time: ', Sys.time()))
+data.combined <- RunTSNE(data.combined, reduction.use = "cca.aligned", dims.use = 1:chosen_cc, do.fast = T)
+
+save(data.combined, file= paste0('data.combined_withTSNE_r', chosen_res, '_CC', chosen_cc, '.RData') )
+
+## make clusters
+print('Finding clusters...')
+print(paste0('System time: ', Sys.time()))
+
+data.combined <- FindClusters(data.combined, reduction.type = "cca.aligned", resolution = as.numeric(chosen_res), dims.use = 1:chosen_cc, nn.eps = 0.5) # the problem line
+save(data.combined, file= paste0('data.combined_withClust_r', chosen_res, '_CC', chosen_cc, '.RData') )
+
+
+## Function to visualize tSNE
+visTSNE <- function(data.combined, myGroup){
+
+  p3 <- TSNEPlot(data.combined, do.return = T, pt.size = 0.5, group.by = myGroup)
+
+  # save output
+  ggsave(file = paste0( 'tSNE_group_', myGroup, '_res', chosen_res, '_CC', chosen_cc, '.pdf' ), plot = p3, device='pdf')
+}
+
+visTSNE(data.combined, "stim")
+visTSNE(data.combined, "Litter")
+visTSNE(data.combined, "CellsPerSample")
+visTSNE(data.combined, "SurgeryDate")
+visTSNE(data.combined, "Condition")
+visTSNE(data.combined, "Genotype")
+
+## Visualize tSNE but with clusters
+p2 <- TSNEPlot(data.combined, do.label = T, do.return = T, pt.size = 0.5)
+ggsave(file = paste0( 'tSNE_clusters_res', chosen_res, '_CC', chosen_cc, '.pdf' ), plot = p2, device='pdf')
+
+# # !! START FROM HERE TO TROUBLESHOOT TALLY
+# load(file.path(outputDir, subDir, 'data.combined_withClust_r1.2_CC40.RData'))
 
 # Find cell marker types conserved across all groups
 print('Finding cell markers conserved across all groups...')

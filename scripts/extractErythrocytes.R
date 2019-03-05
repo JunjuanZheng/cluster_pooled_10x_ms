@@ -5,7 +5,9 @@
 library('Seurat', lib.loc='/scg/apps/software/r/3.5.0/scg/seurat_2.3')
 
 # load data
+#load('/scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/20190226_sexLabel/allVars.RData')
 load('/scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/clusters_simp/data.combined_withClust_r1.2_CC40.RData')
+
 
 # set output dir
 setwd('/scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/20190226_sexLabel')
@@ -209,6 +211,7 @@ data.combined@meta.data[ which(row.names(data.combined@meta.data) %in% cells_pro
 
 ### quick check - for known maleSamps and femSamps, how'd we do?
 #### helpful: https://www.r-graph-gallery.com/48-grouped-barplot-with-ggplot2/
+library(dplyr)
 tally_check_accuracy_Xist <- data.frame(data.combined@meta.data %>% group_by(sample) %>% count(sex))
 tally_check_accuracy_Xist <- rbind(tally_check_accuracy_Xist, c('J', 'F', 0), c('KM1', 'F', 0), c('KM13', 'F', 0), c('KM18', 'F', 0), c('KM2', 'F', 0))
 tally_check_accuracy_Xist$n <- as.numeric(tally_check_accuracy_Xist$n)
@@ -315,8 +318,9 @@ metadata_withSex$newID <- paste0(metadata_withSex$sample, '_', metadata_withSex$
 metadata_withSex$newID <- as.factor(metadata_withSex$newID)
 
 ## save all the barcodes
-cells <- data.frame(Barcode = sapply(strsplit(row.names(metadata_withSex ), split="_"),'[', 2) ,
+cells <- data.frame(Barcode = sapply(strsplit(row.names(metadata_withSex ), split="_"),tail, n=1L) ,
                     sample = metadata_withSex$newID)
+
 setwd('/scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/20190226_sexLabel')
 write.csv(cells, file='allNewID_cells.csv', quote=FALSE, row.names=FALSE)
 

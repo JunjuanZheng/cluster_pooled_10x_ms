@@ -34,14 +34,14 @@ load(inputFile)
 
 ## make subdirectory
 setwd(outputDir)
-subDir <- 'groupCompare'
+subDir <- 'groupCompare_forPresentation0305'
 print(paste0('Name of Experiment: ', subDir))
 
 if (file.exists(subDir)){
-    setwd(file.path(outputDir, subDir))
+  setwd(file.path(outputDir, subDir))
 } else {
-    dir.create(file.path(outputDir, subDir))
-    setwd(file.path(outputDir, subDir))
+  dir.create(file.path(outputDir, subDir))
+  setwd(file.path(outputDir, subDir))
 }
 
 setwd(paste0(outputDir, subDir))
@@ -237,14 +237,17 @@ print(subSubDir)
 print(file.path(outputDir, subDir, subSubDir))
 
 if (file.exists(subSubDir)){
-    setwd(file.path(outputDir, subDir, subSubDir))
+  setwd(file.path(outputDir, subDir, subSubDir))
 } else {
-    dir.create(file.path(outputDir, subDir, subSubDir))
-    setwd(file.path(outputDir, subDir, subSubDir))
+  dir.create(file.path(outputDir, subDir, subSubDir))
+  setwd(file.path(outputDir, subDir, subSubDir))
 }
 
 ## 16p genes
-genesToPlot_16p <- c("Bola2", "Qprt", "Maz", "Mvp", "Cdipt","Sez6l2", "Asphd1", "Kctd13", "Tmem219", "Taok2", "Hirip3", "Ino80e", "Doc2a","Fam57b","Aldoa", "Ppp4c", "Tbx6", "Ypel3", "Gdpd3", "Mapk3", "Coro1a")
+genesToPlot_16p <- c("Bola2", "Qprt", "Maz", "Mvp", "Cdipt","Sez6l2", "Asphd1", "Kctd13", "Tmem219", "Taok2", "Hirip3", "Ino80e", 
+                     "Doc2a","Fam57b","Aldoa", "Ppp4c", "Tbx6", "Ypel3", "Gdpd3", "Mapk3", "Coro1a")
+genesToPlot_16p_best_A <- c("Sez6l2", "Kctd13", "Hirip3", "Fam57b", "Aldoa", "Mapk3")
+genesToPlot_16p_best_B <- c("Bola2", "Maz", "Cdipt", "Ppp4c", "Ypel3", "Coro1a")
 
 ## Other genes of interest
 general_markers_prog <- c('Sox2', 'Pax6', 'Aldoc', 'Eomes', 'Axin2')
@@ -256,15 +259,20 @@ general_markers_inhib_2 <- c('Pvalb', 'Calb1', 'Calb2', 'Nkx2-1', 'Ascl1', 'Gsx2
 thingsMightBeDifferentBasedEarlierAnalysis <- c("Gm8730", "Rplp0", "Glo1", "Ldha", 'Erdr1', 'Gm10709', 'Htr3a') # can't find 'Rpl129'
 sexMarkers <-  c("Xist", "Ddx3y", "Eif2s3y")
 regByLPS <- c('Rpl29', 'Rpl35', 'Ubc', 'Gm10709', 'Gm10076', 'Hist1h2ap', 'Hes5', 'Jund', 'Gm8730')
+regByLPS_small <- c('Rpl29', 'Gm10709', 'Hist1h2ap', 'Rpl35')
+regByLPS_RGCsubgroup <- c('Hmgn2', 'Gm8186', 'Fabp7', 'Rhob', 'Jund', 'Atf3', 'Fam32a')
+
+
+# for presentations
 
 # Create a heatmap that 
 
 plotFeatureHeatmap <- function(data.combined, plotMarkers, myGroup, myTitle, chosen_res, chosen_cc){
-    # plot
-    p <- FeatureHeatmap(data.combined, features.plot = plotMarkers, group.by = myGroup, pt.size = 0.25, key.position = "top", max.exp = 3)
-
-    # save
-    ggsave(file = paste0(myTitle, '_', myGroup, '_r', chosen_res, '_cc', chosen_cc, '.pdf'), plot = p, device='pdf')
+  # plot
+  p <- FeatureHeatmap(data.combined, features.plot = plotMarkers, group.by = myGroup, pt.size = 0.25, key.position = "top", max.exp = 3)
+  
+  # save
+  ggsave(file = paste0(myTitle, '_', myGroup, '_r', chosen_res, '_cc', chosen_cc, '.pdf'), plot = p, device='pdf')
 }
 
 # plot areas
@@ -279,10 +287,20 @@ plotFeatureHeatmap(data.combined, genesToPlot_16p[6:10], "stim", 'FeatureHeatmap
 plotFeatureHeatmap(data.combined, genesToPlot_16p[11:15], "stim", 'FeatureHeatmap_16p_C_', chosen_res, chosen_cc )
 plotFeatureHeatmap(data.combined, genesToPlot_16p[16:21], "stim", 'FeatureHeatmap_16p_D_', chosen_res, chosen_cc )
 
+plotFeatureHeatmap(data.combined, genesToPlot_16p_best_A, "stim", 'FeatureHeatmap_16p_best_A', chosen_res, chosen_cc )
+plotFeatureHeatmap(data.combined, genesToPlot_16p_best_B, "stim", 'FeatureHeatmap_16p_best_B', chosen_res, chosen_cc )
+
+
+
+
 # other
 plotFeatureHeatmap(data.combined, thingsMightBeDifferentBasedEarlierAnalysis, "stim", 'FeatureHeatmap_mightBeDE_', chosen_res, chosen_cc )
 plotFeatureHeatmap(data.combined, sexMarkers, "stim", 'FeatureHeatmap_sexMarkers_', chosen_res, chosen_cc )
-plotFeatureHeatmap(data.combined, regByLPS, "stim", 'FeatureHeatmap_regByLPS_', chosen_res, chosen_cc )
+plotFeatureHeatmap(data.combined, regByLPS, "stim", 'FeatureHeatmap_regByLPS', chosen_res, chosen_cc )
+plotFeatureHeatmap(data.combined, regByLPS_small, "stim", 'FeatureHeatmap_regByLPS_small', chosen_res, chosen_cc )
+plotFeatureHeatmap(data.combined, regByLPS_RGCsubgroup, "stim", 'FeatureHeatmap_regByLPS_RGCsubgroup', chosen_res, chosen_cc )
+
+
 
 
 # driven by outliers?
@@ -290,17 +308,23 @@ plotFeatureHeatmap(data.combined, general_markers_YN, "sample", 'FeatureHeatmap_
 plotFeatureHeatmap(data.combined, thingsMightBeDifferentBasedEarlierAnalysis, "sample", 'FeatureHeatmap_mightBeDE_sample_', chosen_res, chosen_cc )
 plotFeatureHeatmap(data.combined, sexMarkers, "sample", 'FeatureHeatmap_sexMarkers_sample_', chosen_res, chosen_cc )
 
+## Plot long sex markers
+# plot
+p_sex <- FeatureHeatmap(data.combined, features.plot = sexMarkers, group.by = "sample", pt.size = 0.25, key.position = "top", max.exp = 3)
+
+# save
+ggsave(file = paste0('FeatureHeatmap_sexMarkers_long_sample_r', chosen_res, '_cc', chosen_cc, '.pdf'), plot = p_sex, device='pdf', width=36, height=16, units="cm")
 
 
 # plot individual genes
 
 plotVlnPlot <- function(data.combined, plotGene, myGroup, myTitle, chosen_res, chosen_cc){
-    # plot
-    p <- VlnPlot(object = data.combined, features.plot = plotGene, group.by = myGroup, 
-    do.return = TRUE)
-
-    # save
-    ggsave(file = paste0(myTitle, '_', myGroup, '_', plotGene, '_r', chosen_res, '_cc', chosen_cc, '.pdf'), plot = p, device='pdf')
+  # plot
+  p <- VlnPlot(object = data.combined, features.plot = plotGene, group.by = myGroup, 
+               do.return = TRUE)
+  
+  # save
+  ggsave(file = paste0(myTitle, '_', myGroup, '_', plotGene, '_r', chosen_res, '_cc', chosen_cc, '.pdf'), plot = p, device='pdf')
 }
 
 plotVlnPlot(data.combined, 'Hbb-y', 'stim', 'plotVlnPlot', chosen_res, chosen_cc)
