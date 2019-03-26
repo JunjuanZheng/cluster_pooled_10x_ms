@@ -42,70 +42,70 @@ if (file.exists(subDir)){
 
 setwd(paste0(outputDir, subDir))
 
-# # Figure out what genes should be inputs to CCA
-# print('~*~')
-# print('Figuring out what genes should be inputs to CCA...')
-# print(paste0('System time: ', Sys.time()))
-# ## Find variable genes
-# wt.sal <- FindVariableGenes(wt.sal, do.plot = F)
-# wt.lps <- FindVariableGenes(wt.lps, do.plot = F)
-# het.sal <- FindVariableGenes(het.sal, do.plot = F)
-# het.lps <- FindVariableGenes(het.lps, do.plot = F)
-# 
-# ## Glance at what those genes are
-# print('Highly variable genes:')
-# g.1 <- head(rownames(wt.sal@hvg.info), 1000)
-# g.2 <- head(rownames(wt.lps@hvg.info), 1000)
-# g.3 <- head(rownames(het.sal@hvg.info), 1000)
-# g.4 <- head(rownames(het.lps@hvg.info), 1000)
-# 
-# ## what genes are in common
-# genes.use <- unique(c(g.1, g.2, g.3, g.4))
-# genes.use <- intersect(genes.use, rownames(wt.sal@scale.data))
-# genes.use <- intersect(genes.use, rownames(wt.lps@scale.data))
-# genes.use <- intersect(genes.use, rownames(het.sal@scale.data))
-# genes.use <- intersect(genes.use, rownames(het.lps@scale.data))
-# 
-# 
-# # Create metadata variable to store sample name
-# wt.sal@meta.data$sample <- wt.sal@meta.data$demuxSample
-# wt.lps@meta.data$sample <- wt.lps@meta.data$demuxSample
-# het.sal@meta.data$sample <- het.sal@meta.data$demuxSample
-# het.lps@meta.data$sample <- het.lps@meta.data$demuxSample
-# 
-# 
-# # Run Canonical Correlation Analysis
-# print('~*~')
-# print('Running Canonical Correlation Analysis...')
-# print(paste0('System time: ', Sys.time()))
-# setwd(paste0(outputDir, subDir))
-# 
-# objects <- c(wt.sal, wt.lps, het.sal, het.lps)
-# cellIDs <- c('WT.SAL', 'WT.LPS', 'HET.SAL', 'HET.LPS')
-# #cellIDs <- c(as.character(wt.sal@meta.data$orig.ident), as.character(wt.lps@meta.data$orig.ident), as.character(het.sal@meta.data$orig.ident), as.character(het.lps@meta.data$orig.ident))
-# 
-# head(wt.sal@meta.data)
-# head(x = wt.sal@cell.names)
-# 
-# 
-# 
-# data.combined <- RunMultiCCA(objects, genes.use = genes.use, num.ccs = numCCs, add.cell.ids = cellIDs)
-# 
-# head(data.combined@meta.data)
-# head(x = data.combined@cell.names)
-# table(data.combined@meta.data$orig.ident) # vewrify that it works and you can detect sample types still
-# 
-# ## save variable because it takes so long to make
-# setwd(paste0(outputDir, subDir))
-# print(paste0('Directory should be ',paste0(outputDir, subDir)) )
-# setwd(file.path(outputDir, subDir))
-# save(data.combined, file = paste0("data.combined_multiCCA.RData"))
+# Figure out what genes should be inputs to CCA
+print('~*~')
+print('Figuring out what genes should be inputs to CCA...')
+print(paste0('System time: ', Sys.time()))
+## Find variable genes
+wt.sal <- FindVariableGenes(wt.sal, do.plot = F)
+wt.lps <- FindVariableGenes(wt.lps, do.plot = F)
+het.sal <- FindVariableGenes(het.sal, do.plot = F)
+het.lps <- FindVariableGenes(het.lps, do.plot = F)
 
-# uncomment to just load earlier file ~~~~~~
-print('Loading CCA file you made before...')
+## Glance at what those genes are
+print('Highly variable genes:')
+g.1 <- head(rownames(wt.sal@hvg.info), 1000)
+g.2 <- head(rownames(wt.lps@hvg.info), 1000)
+g.3 <- head(rownames(het.sal@hvg.info), 1000)
+g.4 <- head(rownames(het.lps@hvg.info), 1000)
+
+## what genes are in common
+genes.use <- unique(c(g.1, g.2, g.3, g.4))
+genes.use <- intersect(genes.use, rownames(wt.sal@scale.data))
+genes.use <- intersect(genes.use, rownames(wt.lps@scale.data))
+genes.use <- intersect(genes.use, rownames(het.sal@scale.data))
+genes.use <- intersect(genes.use, rownames(het.lps@scale.data))
+
+
+# Create metadata variable to store sample name
+wt.sal@meta.data$sample <- wt.sal@meta.data$demuxSample
+wt.lps@meta.data$sample <- wt.lps@meta.data$demuxSample
+het.sal@meta.data$sample <- het.sal@meta.data$demuxSample
+het.lps@meta.data$sample <- het.lps@meta.data$demuxSample
+
+
+# Run Canonical Correlation Analysis
+print('~*~')
+print('Running Canonical Correlation Analysis...')
+print(paste0('System time: ', Sys.time()))
+setwd(paste0(outputDir, subDir))
+
+objects <- c(wt.sal, wt.lps, het.sal, het.lps)
+cellIDs <- c('WT.SAL', 'WT.LPS', 'HET.SAL', 'HET.LPS')
+#cellIDs <- c(as.character(wt.sal@meta.data$orig.ident), as.character(wt.lps@meta.data$orig.ident), as.character(het.sal@meta.data$orig.ident), as.character(het.lps@meta.data$orig.ident))
+
+head(wt.sal@meta.data)
+head(x = wt.sal@cell.names)
+
+
+
+data.combined <- RunMultiCCA(objects, genes.use = genes.use, num.ccs = numCCs, add.cell.ids = cellIDs)
+
+head(data.combined@meta.data)
+head(x = data.combined@cell.names)
+table(data.combined@meta.data$orig.ident) # vewrify that it works and you can detect sample types still
+
+## save variable because it takes so long to make
+setwd(paste0(outputDir, subDir))
+print(paste0('Directory should be ',paste0(outputDir, subDir)) )
 setwd(file.path(outputDir, subDir))
-print(paste0('file path is: ', file.path(outputDir, subDir)))
-load("data.combined_multiCCA.RData")
+save(data.combined, file = paste0("data.combined_multiCCA.RData"))
+
+# # uncomment to just load earlier file ~~~~~~
+# print('Loading CCA file you made before...')
+# setwd(file.path(outputDir, subDir))
+# print(paste0('file path is: ', file.path(outputDir, subDir)))
+# load("data.combined_multiCCA.RData")
 
 # add my own metadata to Seurat object !!!!! FIX THIS
 print('~*~')

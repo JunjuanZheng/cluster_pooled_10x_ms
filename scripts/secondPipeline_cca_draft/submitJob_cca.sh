@@ -30,7 +30,7 @@ module load r/3.5.0
 ### (3) chosen number of CCs
 ### (4) the chosen resolution
 #Rscript cca_clusters.R $OUTPUT_16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/calcCCA/data.combined_multiCCA_metadata.RData $OUTPUT_16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/ 40 1.2
-Rscript cca_clusters.R $OUTPUT_16p/201901_cluster_pooled_10x_ms/20190228_runThroughDemultiplex/calcCCA/data.combined_multiCCA_metadata.RData $OUTPUT_16p/201901_cluster_pooled_10x_ms/20190228_runThroughDemultiplex/ 40 1.2
+#Rscript cca_clusters.R $OUTPUT_16p/201901_cluster_pooled_10x_ms/20190228_runThroughDemultiplex/calcCCA/data.combined_multiCCA_metadata.RData $OUTPUT_16p/201901_cluster_pooled_10x_ms/20190228_runThroughDemultiplex/ 40 1.2
 
 # Visualize output
 ## Order of variables: 
@@ -39,5 +39,5 @@ Rscript cca_clusters.R $OUTPUT_16p/201901_cluster_pooled_10x_ms/20190228_runThro
 ### (3) chosen number of CCs
 ### (4) the chosen resolution
 #Rscript cca_groupCompare.R $OUTPUT_16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/clusters_simp/data.combined_withClust_r1.2_CC40.RData $OUTPUT_16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/ 40 1.2
-Rscript cca_groupCompare.R $OUTPUT_16p/201901_cluster_pooled_10x_ms/20190228_runThroughDemultiplex/clusters_simp/data.combined_withClust_r1.2_CC40.RData $OUTPUT_16p/201901_cluster_pooled_10x_ms/20190228_runThroughDemultiplex/ 40 1.2
+Rscript cca_groupCompare.R $OUTPUT_16p/201901_cluster_pooled_10x_ms/20190228_runThroughDemultiplex/clusters/data.combined_withClust_r1.2_CC40.RData $OUTPUT_16p/201901_cluster_pooled_10x_ms/20190228_runThroughDemultiplex/ 40 1.2
 

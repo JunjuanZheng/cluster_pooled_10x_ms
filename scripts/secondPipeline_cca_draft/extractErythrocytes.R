@@ -4,6 +4,8 @@
 
 library('Seurat', lib.loc='/scg/apps/software/r/3.5.0/scg/seurat_2.3')
 
+# note: to use demultiplex run, use the folder: 20190228_runThroughDemultiplex
+
 # load data
 #load('/scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/20190226_sexLabel/allVars.RData')
 load('/scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/clusters_simp/data.combined_withClust_r1.2_CC40.RData')
@@ -61,17 +63,15 @@ plotVlnPlot <- function(data.combined, plotGene, myGroup, myTitle, chosen_res, c
   data.combined <- SetAllIdent(data.combined, id = myGroup)
   
   # plot
-  p <- VlnPlot(object = data.combined, features.plot = plotGene, group.by = myGroup, 
-               do.return = TRUE)
-  #p_raw <- VlnPlot(object = data.combined, features.plot = plotGene, group.by = myGroup, do.return = TRUE, use.raw=TRUE)
+  #p <- VlnPlot(object = data.combined, features.plot = plotGene, group.by = myGroup, do.return = TRUE)
+  p_raw <- VlnPlot(object = data.combined, features.plot = plotGene, group.by = myGroup, do.return = TRUE, use.raw=TRUE)
   
   #p_scaled <- VlnPlot(object = data.combined, features.plot = plotGene, group.by = myGroup,  do.return = TRUE, use.scaled=TRUE)
   
   # save
-  ggsave(file = paste0(myTitle, '_', myGroup, '_', plotGene, '_r', chosen_res, 
-                       '_cc', chosen_cc, '.pdf'), plot = p, device='pdf')
+  #ggsave(file = paste0(myTitle, '_', myGroup, '_', plotGene, '_r', chosen_res, '_cc', chosen_cc, '.pdf'), plot = p, device='pdf')
   
-  #ggsave(file = paste0(myTitle, '_raw_', myGroup, '_', plotGene, '_r', chosen_res, '_cc', chosen_cc, '.pdf'), plot = p_raw, device='pdf')
+  ggsave(file = paste0(myTitle, '_raw_', myGroup, '_', plotGene, '_r', chosen_res, '_cc', chosen_cc, '.pdf'), plot = p_raw, device='pdf')
   
   #ggsave(file = paste0(myTitle, '_scaled_', myGroup, '_', plotGene, '_r', chosen_res, '_cc', chosen_cc, '.pdf'), plot = p_scaled, device='pdf')
   
@@ -97,9 +97,9 @@ plotVlnPlot(defM, 'Xist', 'isInt', 'violinPlot_M', 1.2, 40)
 ## function for quick readout
 countBins <- function(seuObj){
   print(paste0('Number of cells = 0: ', length(which(seuObj == 0)) ))
-  print(paste0('Number of cells bewteen 0 and 1: ', length(which(seuObj > 0 & seuObj < 1)) ))
-  print(paste0('Number of cells bewteen 1 and 1.5: ', length(which(seuObj > 1 & seuObj < 1.5)) ))
-  print(paste0('Number of cells bewteen 1.5 and 2: ', length(which(seuObj > 1.5 & seuObj < 2)) ))
+  print(paste0('Number of cells bewteen 0 and 1: ', length(which(seuObj > 0 & seuObj <= 1)) ))
+  print(paste0('Number of cells bewteen 1 and 1.5: ', length(which(seuObj > 1 & seuObj <= 1.5)) ))
+  print(paste0('Number of cells bewteen 1.5 and 2: ', length(which(seuObj > 1.5 & seuObj <= 2)) ))
   print(paste0('Number of cells above 2: ', length(which(seuObj > 2)) ))
 }
 
@@ -139,25 +139,40 @@ countBins(defM_Xist_all_raw)
 
 
 
-# What are the cell identities of F cells with low Xist, and M cells with high Xist?
+# What are the cell identities of F cells with low Xist, and M cells with high Xist? (Pie charts)
 thresh <- 1
 
 ## pull out what cells fit that criteria
-F_LowXist <- row.names(data.frame(defF_Xist_all[which(defF_Xist_all < thresh),]) )
-F_LowXist_raw <- row.names(data.frame(defF_Xist_all_raw[which(defF_Xist_all_raw < thresh),]) )
+F_LowXist <- row.names(data.frame(defF_Xist_all[which(defF_Xist_all <= thresh),]) )
+F_LowXist_raw <- row.names(data.frame(defF_Xist_all_raw[which(defF_Xist_all_raw <= thresh),]) )
 M_highXist <- row.names(data.frame(defM_Xist_all[which(defM_Xist_all > thresh),]) )
-M_lowXist <- row.names(data.frame(defM_Xist_all[which(defM_Xist_all < thresh),]) )
+M_lowXist <- row.names(data.frame(defM_Xist_all[which(defM_Xist_all <= thresh),]) )
 
-
+## plotting data
 F_LowXistMeta <- data.combined@meta.data[which(row.names(data.combined@meta.data) %in% F_LowXist ) , ]
 F_LowXistMeta_raw <- data.combined@meta.data[which(row.names(data.combined@meta.data) %in% F_LowXist_raw ) , ]
+
 M_HighXistMeta <- data.combined@meta.data[which(row.names(data.combined@meta.data) %in% M_highXist ) , ]
 
 ## tally
+### with help from: http://mathematicalcoffee.blogspot.com/2014/06/ggpie-pie-graphs-in-ggplot2.html
+### create blank theme
+blank_theme <- theme_minimal()+
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.border = element_blank(),
+    panel.grid=element_blank(),
+    axis.ticks = element_blank(),
+    plot.title=element_text(size=14, face="bold")
+  )
+
+### pie graph of tallies
 library(dplyr)
+library(ggplot2)
 count_F_LowXist_Clust <- data.frame(F_LowXistMeta %>% count(res.1.2))
 ggplot(count_F_LowXist_Clust, aes(x="", y=n, fill=res.1.2)) +
-  geom_bar(width = 1, stat = "identity") + 
+  geom_bar(width = 1, stat = "identity", color = 'black') + 
   coord_polar("y", start=0)
 
 count_M_HighXist_Clust <- data.frame(M_HighXistMeta %>% count(res.1.2))
@@ -166,21 +181,43 @@ ggplot(count_M_HighXist_Clust, aes(x="", y=n, fill=res.1.2)) +
   coord_polar("y", start=0)
 
 count_F_LowXist_Clust_raw <- data.frame( F_LowXistMeta_raw %>% count(res.1.2) )
-ggplot(count_F_LowXist_Clust_raw, aes(x="", y=n, fill=res.1.2)) +
-  geom_bar(width = 1, stat = "identity") + 
-  coord_polar("y", start=0)
+count_F_LowXist_Clust_raw$percents <- signif( (count_F_LowXist_Clust_raw$n/sum(count_F_LowXist_Clust_raw$n)) * 100, 2) # add percents
+count_F_LowXist_Clust_raw$clustNames <- c('Ctip2+ Young Neurons', 'G1 Radial Glia', 'Mesoderm',
+                                          'Wnt-expressing Young Neurons', 'SST+ Interneuron', 'Mesenchyme',
+                                          'Calb2+ Interneuron','Erythrocytes', 'Vasculature A', 
+                                          'Vasculature B', 'G2 Radial Glia', 'Cycling Radial Glia',
+                                          'CHD7+ Intermediate Progenitor', 'Elval4+ Intermediate Progenitor', 'Intermediate Progenitor', 
+                                          'Young Neuron')
+count_F_LowXist_Clust_raw$fullNames <- paste0(count_F_LowXist_Clust_raw$clustNames, ' (', count_F_LowXist_Clust_raw$percents, '%)')
+count_F_LowXist_Clust_raw <- count_F_LowXist_Clust_raw[order(count_F_LowXist_Clust_raw$percents),]
+count_F_LowXist_Clust_raw$fullNames <- factor(count_F_LowXist_Clust_raw$fullNames, levels = rev(as.character(count_F_LowXist_Clust_raw$fullNames)))
 
-# Of the cells that are F-lowXist and M-highXist, what's their male gene expression like?
+
+
+p <- ggplot(count_F_LowXist_Clust_raw, aes(x="", y=n, fill=fullNames)) +
+  geom_bar(width = 1, stat = "identity", color = 'black') + 
+  coord_polar("y", start=0) +
+  labs(fill='Cluster') +
+  blank_theme +
+  theme(axis.text.x=element_blank()) +
+  ggtitle('Cells with no detectable Xist from female cortical cap samples')
+
+ggsave('pieGraph_F_cells_lowXist_clusters.pdf', plot = p, device='pdf')
+
+
+# Of the cells that are F-lowXist and M-lowXist, what's their male gene expression like?
 exprs_F_LowXist_Ddx3y <- FetchData(defF, vars.all = 'Ddx3y', cells.use = F_LowXist)
 hist(exprs_F_LowXist_Ddx3y)
 exprs_F_LowXist_Eif2s3y <- FetchData(defF, vars.all = 'Eif2s3y', cells.use = F_LowXist)
 hist(exprs_F_LowXist_Eif2s3y)
 
+## Of definitively male cells that are Xist- (i.e. all of them, in raw sample, what is male gene expression like), what are Eif2s3y and Ddx3y expressed as?
 exprs_M_lowXist_Ddx3y <- FetchData(defM, vars.all = 'Ddx3y', cells.use = M_lowXist)
 exprs_M_lowXist_Eif2s3y <- FetchData(defM, vars.all = 'Eif2s3y', cells.use = M_lowXist)
 exprs_M_lowXist_Ddx3y_raw <- FetchData(defM, vars.all = 'Ddx3y', cells.use = M_lowXist, use.raw = TRUE)
 exprs_M_lowXist_Eif2s3y_raw <- FetchData(defM, vars.all = 'Eif2s3y', cells.use = M_lowXist, use.raw = TRUE)
-exprs_M_lowXist_manGenes_raw <- data.frame(FetchData(defM, vars.all = c('Eif2s3y', 'Ddx3y'), cells.use = M_lowXist, use.raw = TRUE))
+exprs_M_lowXist_manGenes_raw <- data.frame(FetchData(defM, vars.all = c('Eif2s3y', 'Ddx3y', 'Xist'), cells.use = M_lowXist, use.raw = TRUE))
+exprs_F_lowXist_manGenes_raw <- data.frame(FetchData(defF, vars.all = c('Eif2s3y', 'Ddx3y', 'Xist'), cells.use = F_LowXist, use.raw = TRUE))
 
 
 ## try it again
@@ -196,9 +233,49 @@ plotVlnPlot(lowXistCells, 'Ddx3y', 'sex', 'violinPlot_lowXistCells', 1.2, 40)
 ## how many of the low Xist cells express > 0 Eif2s3y? Ddx3y?
 exprs_M_lowXist_Eif2s3y_raw <- FetchData(defM, vars.all = 'Eif2s3y', cells.use = M_lowXist, use.raw = TRUE)
 
-## how many have one OR the other?
-nrow(exprs_M_lowXist_manGenes_raw[which(exprs_M_lowXist_manGenes_raw$Ddx3y > 0 | exprs_M_lowXist_manGenes_raw$Eif2s3y > 0),])
+## how many have one OR the other? (table in presentation 2.28)
+exprs_M_lowXist_manGenes_raw_meta <- merge(exprs_M_lowXist_manGenes_raw, defM@meta.data, by='row.names')
+exprs_F_lowXist_manGenes_raw_meta <- merge(exprs_F_lowXist_manGenes_raw, defF@meta.data, by='row.names')
+
+M_lowXist_someYGene <- exprs_M_lowXist_manGenes_raw_meta[which(exprs_M_lowXist_manGenes_raw_meta$Ddx3y > 0 | exprs_M_lowXist_manGenes_raw_meta$Eif2s3y > 0),]
+M_lowXist_Ddx3y <- exprs_M_lowXist_manGenes_raw_meta[which(exprs_M_lowXist_manGenes_raw_meta$Ddx3y > 0 ),]
+M_lowXist_Eif2s3y <- exprs_M_lowXist_manGenes_raw_meta[which(exprs_M_lowXist_manGenes_raw_meta$Eif2s3y > 0),]
+
+F_lowXist_Ddx3y <- exprs_F_lowXist_manGenes_raw_meta[which(exprs_F_lowXist_manGenes_raw_meta$Ddx3y > 0 ),]
+F_lowXist_Eif2s3y <- exprs_F_lowXist_manGenes_raw_meta[which(exprs_F_lowXist_manGenes_raw_meta$Eif2s3y > 0 ),]
+
+
 nrow(exprs_M_lowXist_manGenes_raw[which(exprs_M_lowXist_manGenes_raw$Ddx3y == 0 & exprs_M_lowXist_manGenes_raw$Eif2s3y == 0),])
+
+## make seurat objects for Xist- M and F cells
+lowXistCells_M <- SubsetData(defM, cells.use=M_lowXist, subset.raw = T)
+lowXistCells_F <- SubsetData(defF, cells.use=F_LowXist_raw, subset.raw = T)
+
+
+meanAndSdOfYGenes <- function(expressData, lowXistSeurat){
+  
+  myCounts <- data.frame(expressData %>% count(sample) )
+  myCounts_totals <- data.frame(lowXistSeurat@meta.data %>% count(sample))
+  
+  myCounts <- merge(myCounts, myCounts_totals, by='sample')
+  
+  myCounts$percent <- (myCounts$n.x/myCounts$n.y)*100
+  #View(myCounts)
+  myMean <- mean(myCounts$percent)
+  mySd <- sd(myCounts$percent)
+  
+  print(paste0('Mean: ', myMean, '%'))
+  print(paste0('SD: ', mySd, '%'))
+  
+}
+
+meanAndSdOfYGenes(M_lowXist_someYGene, lowXistCells_M)
+meanAndSdOfYGenes(M_lowXist_Ddx3y, lowXistCells_M)
+meanAndSdOfYGenes(M_lowXist_Eif2s3y, lowXistCells_M)
+meanAndSdOfYGenes(F_lowXist_Ddx3y, lowXistCells_F)
+meanAndSdOfYGenes(F_lowXist_Eif2s3y, lowXistCells_F)
+
+
 
 
 # Provide sex labels to the cells
@@ -209,17 +286,73 @@ cells_probF <- row.names(exprs_all_sexGenes_raw[which(exprs_all_sexGenes_raw$Xis
 data.combined@meta.data$sex <- 'M'
 data.combined@meta.data[ which(row.names(data.combined@meta.data) %in% cells_probF) ,'sex'] <- 'F'
 
-### quick check - for known maleSamps and femSamps, how'd we do?
+## quick check - for known maleSamps and femSamps, how'd we do?
 #### helpful: https://www.r-graph-gallery.com/48-grouped-barplot-with-ggplot2/
 library(dplyr)
+neutralColors <- c('#009b76', '#eaab00') 
+
+## make tallies
 tally_check_accuracy_Xist <- data.frame(data.combined@meta.data %>% group_by(sample) %>% count(sex))
 tally_check_accuracy_Xist <- rbind(tally_check_accuracy_Xist, c('J', 'F', 0), c('KM1', 'F', 0), c('KM13', 'F', 0), c('KM18', 'F', 0), c('KM2', 'F', 0))
 tally_check_accuracy_Xist$n <- as.numeric(tally_check_accuracy_Xist$n)
+tally_check_accuracy_Xist$color <- neutralColors[match(tally_check_accuracy_Xist$sex, neutralColors$sex ), 'colors']
 
-ggplot(tally_check_accuracy_Xist, aes(fill=sex, y=n, x=sample)) + 
+p_sexProp <- ggplot(tally_check_accuracy_Xist, aes(fill=sex, y=n, x=sample)) + 
+  scale_fill_manual(values=neutralColors) + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, size=20),
+        axis.text.y = element_text(size=20))
+
+p_sexProp_N <- p_sexProp + 
   geom_bar( stat="identity")
-ggplot(tally_check_accuracy_Xist, aes(fill=sex, y=n, x=sample)) + 
+
+p_sexProp_percent <- p_sexProp + 
   geom_bar( stat="identity", position = "fill")
+
+ggsave('barProp_demuxCheck_n.pdf',p_sexProp_N,device='pdf')
+ggsave('barProp_demuxCheck_percent.pdf',p_sexProp_percent,device='pdf')
+
+
+## plotting F, Xist M, and Xist F
+
+## identify from ALL genes who expresses a Y gene
+noXist_someYmarker <- exprs_all_sexGenes_raw[exprs_all_sexGenes_raw$Xist <= thresh &
+                                (exprs_all_sexGenes_raw$Ddx3 > 0 |
+                                exprs_all_sexGenes_raw$Eif2s3y > 0),]
+
+colors_fadeF <- c('#B1D4C7', '#E1AE3B','#AC8630')
+colors_fadeF_noF <- c('#E1AE3B','#AC8630')
+
+
+plottingFandTwoM <- data.combined@meta.data
+plottingFandTwoM[which(plottingFandTwoM$sex == 'F') ,'group'] <- 'Called F, Xist(+)'
+plottingFandTwoM[which(row.names(plottingFandTwoM) %in% row.names(noXist_someYmarker)) ,'group'] <- 'Called M, Xist(-), Y Marker(+) '
+plottingFandTwoM[which( !(row.names(plottingFandTwoM) %in% row.names(noXist_someYmarker)) &
+                          !(plottingFandTwoM$sex == 'F')) ,'group'] <- 'Called M, Xist(-), Y Marker(-)'
+
+tally_check_accuracy_TwoM <- data.frame(plottingFandTwoM %>% group_by(sample) %>% count(group))
+tally_check_accuracy_TwoM_noF <- tally_check_accuracy_TwoM[ which(!(  tally_check_accuracy_TwoM$group == 'Called F, Xist(+)' )) ,]
+tally_check_accuracy_TwoM_noF <- tally_check_accuracy_TwoM_noF[ which(!(  tally_check_accuracy_TwoM_noF$sample %in% c('I','K','L') )) ,]
+
+
+p_ymarkSplit <- ggplot(tally_check_accuracy_TwoM, aes(fill=group, y=n, x=sample)) + 
+  scale_fill_manual(values=colors_fadeF) + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, size=20),
+        axis.text.y = element_text(size=20))
+
+p_ymarkSplit_percent <- p_ymarkSplit + geom_bar( stat="identity", position = "fill")
+
+p_ymarkSplit_noF <- ggplot(tally_check_accuracy_TwoM_noF, aes(fill=group, y=n, x=sample)) + 
+  scale_fill_manual(values=colors_fadeF_noF) + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, size=20),
+        axis.text.y = element_text(size=20))
+
+p_ymarkSplit_percent_noF <- p_ymarkSplit_noF + geom_bar( stat="identity", position = "fill")
+
+ggsave('barProp_demuxCheck_yMarker_percent.pdf', p_ymarkSplit_percent, device='pdf')
+ggsave('barProp_demuxCheck_yMarker_percent_noF_noFSamp.pdf', p_ymarkSplit_percent_noF, device='pdf')
+
+
+
 
 ## adjust indivdual samples
 data.combined@meta.data[ which( data.combined@meta.data$sample %in% femSamps) ,'sex' ] <- 'F'
@@ -230,6 +363,9 @@ ggplot(tally_check_accuracy_Xist_afterCorrection, aes(fill=sex, y=n, x=sample)) 
   geom_bar( stat="identity")
 ggplot(tally_check_accuracy_Xist_afterCorrection, aes(fill=sex, y=n, x=sample)) + 
   geom_bar( stat="identity", position = "fill")
+
+
+
 
 ## For samples F and G, what proportion of those samples express Male Sex Genes?
 ### If half or more express Male Sex Genes = more likely they are all male?
@@ -246,7 +382,7 @@ exprs_sampG <- exprs_justFandG_sexGenes[which(row.names(exprs_justFandG_sexGenes
 exprs_sampKM1 <- exprs_justFandG_sexGenes[which(row.names(exprs_justFandG_sexGenes) %in% cells_sampKM1),]
 exprs_sampH <- exprs_justFandG_sexGenes[which(row.names(exprs_justFandG_sexGenes) %in% cells_sampH),]
 
-# function to print out counts
+## function to print out counts
 howManyInEachSexGeneCategory <- function(exprs_samp, thresh){
   
   totalCells <- nrow(exprs_samp)
@@ -284,7 +420,7 @@ howManyInEachSexGeneCategory(exprs_sampH, thresh)
 
 
 
-# calculating specificity and sensitivity
+## calculating specificity and sensitivity
 A_trueM_calledM <- sum(tally_check_accuracy_Xist[which(tally_check_accuracy_Xist$sample %in% maleSamps &
                                                          tally_check_accuracy_Xist$sex == 'M'), 'n'])
 B_trueM_calledF <- sum(tally_check_accuracy_Xist[which(tally_check_accuracy_Xist$sample %in% maleSamps &

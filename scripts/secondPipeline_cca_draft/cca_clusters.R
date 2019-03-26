@@ -158,7 +158,7 @@ getMarkerInfo <- function(data.combined, i){
 
   # visualize
   print(paste0('Getting feature plot for ', i, '...'))
-  pdf(file = paste0('FeaturePlot_', i))
+  pdf(file = paste0('FeaturePlot_', i, '.pdf'))
   FeaturePlot(object = data.combined, features.plot = row.names(consMarkers[c(1:9),]), min.cutoff = "q9", cols.use = c("lightgrey", "blue"), pt.size = 0.5)
   dev.off()
 
@@ -194,41 +194,42 @@ for (i in 0:max(as.numeric(unique(data.combined@meta.data$res.1.2)))){
 ## function
 tallyClusters <- function(data.combined, clusterNames){
 
-  first <- data.combined@meta.data$sample[1]
+  first <- as.character(data.combined@meta.data$sample[1])
   
   # start by doing the first one
   tallyOfAll <- data.combined@meta.data[data.combined@meta.data$sample == first,] %>% group_by(eval(parse(text=clusterNames))) %>% tally()
   colnames(tallyOfAll) <- c(clusterNames, first)
+  print(c(clusterNames, first))
   print('tally of all - first')
-  #View(tallyOfAll)
-  
+
   # finish by doing all else in list
   print('tally of all - next')
-  for ( i in unique(data.combined@meta.data$sample)[-1] ){
+  for ( i in as.character(unique(data.combined@meta.data$sample)[-1] )){
     print(i)
+    print(c(clusterNames, i))
     myTally <- data.combined@meta.data[data.combined@meta.data$sample == i,] %>% group_by(eval(parse(text=clusterNames))) %>% tally()
-    colnames(myTally) <- c(clusterNames, i)
+    colnames(myTally) <- c(clusterNames, i )
     #View(myTally) # has 19
     #View(tallyOfAll) # doesn't have 19
     tallyOfAll <- merge(tallyOfAll, myTally, by=clusterNames, all=TRUE)
     }
   
   # add column names
-  colnames(tallyOfAll) <- c(clusterNames, unique(data.combined@meta.data$sample))
+  colnames(tallyOfAll) <- c(clusterNames, as.character(unique(data.combined@meta.data$sample)))
   
   return(tallyOfAll)
 }
 
 ## perform tally
 #table(data.combined@meta.data$sample) # print table so you know what it's tallying by and what first one should be
-tally <- tallyClusters(data.combined, 'res.1.2')
-tally[is.na(tally)] <- 0
-write.csv(tally, file = paste0('tally_pc_nolabels_', chosen_cc, "_r", chosen_res, '.csv'), quote=FALSE)
+myTally <- tallyClusters(data.combined, 'res.1.2')
+myTally[is.na(myTally)] <- 0
+write.csv(myTally, file = paste0('tally_pc_nolabels_', chosen_cc, "_r", chosen_res, '.csv'), quote=FALSE)
 
-# ## Build Cluster Tree
-# pdf(file='buildClusterTree.pdf', height=8, width=8) # is this in wrong place?
-# data.combined <- BuildClusterTree(data.combined)
-# dev.off()
+## Build Cluster Tree
+pdf(file='buildClusterTree.pdf', height=8, width=8) # is this in wrong place?
+data.combined <- BuildClusterTree(data.combined)
+dev.off()
 
 
 
@@ -238,8 +239,8 @@ print('~*~')
 print('Saving variables...')
 print(paste0('System time: ', Sys.time()))
 
-# setwd(paste0(outputDir, subDir))
-# save.image(file = paste0("allVars.RData"))
+setwd(paste0(outputDir, subDir))
+save.image(file = paste0("allVars.RData"))
 
 print('~*~ All done! ~*~')
 print(paste0('System time: ', Sys.time()))

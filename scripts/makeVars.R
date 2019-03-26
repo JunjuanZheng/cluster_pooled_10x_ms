@@ -1,16 +1,20 @@
-sampl# Kristin Muench
-# 2019.02.12
-# Pipeline to run Seurat setup for mouse scRNA-Seq data - with CCA
+# Kristin Muench
+# 2019.03.26
+# Pipeline to run Seurat setup for mouse scRNA-Seq data with CCA
+# # # # # # # # # # # # # # # # # #
 
 # Load needed library
-#install.packages('Seurat')
-
 # Load older version of Seurat which has the functions I need
 library('Seurat', lib.loc='/scg/apps/software/r/3.5.0/scg/seurat_2.3')
 packageVersion('Seurat')
 
-# Load cell IDs for demultiplexing samples
-allNewID_cells <- read.csv("/scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/20190226_sexLabel/allNewID_cells.csv")
+## run this in case you accidentally load Seurat 3
+#detach("package:Seurat", unload=TRUE)
+
+# !!!!! FIX THIS TO ACCOUNT FOR MULTI GROUP BARCODES
+## Load cell IDs for demultiplexing samples
+#altID_cells <- read.csv("/scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/20190226_sexLabel/allNewID_cells.csv")
+altID_cells <- read.csv("/labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/metadata/originalSampleBarcodeLUT.csv")
 
 # import from command line
 args <- commandArgs(TRUE)
@@ -49,7 +53,7 @@ print(paste0(mtxPath, '/', list.filenames[1],'/mm10/'))
 # read metadata
 metadata<-read.csv(metadataPath)
 
-# in list filenames, what are the corresponding sample IDs?
+# create look up table for list.filenames with corresponding sample IDs?
 files <- data.frame(filenames = list.filenames)
 files$ids <- unlist(lapply(strsplit(list.filenames, "_"), '[[', 1))
 
@@ -60,11 +64,13 @@ list.filenames.het.sal <- files[files$ids %in% metadata[metadata$Group == 'HET.S
 list.filenames.het.lps <- files[files$ids %in% metadata[metadata$Group == 'HET.LPS','SampleID'], 'filenames']
 
 
-
-# loop, but where first entry is used to make mergeSeurat, and subsequent used to tack on Seurat
-# condName, e.g. 'WT.SAL'
-# files: variable created above that has both file IDs and sample IDs
-# !!!!! WORK ON MAKING ORIG.IDENT ACCURATE. FIX FILES HERE WHICH REFERES TO EVERYTHING RN
+# Create Seurat object for each condition
+## First sample imported to start the Seurat object
+## Each subsequent loop is used to tack on Seurat objects corresponding to the other samples
+## filenames: list of filenames with only files relevant to that condition, e.g. list.filenames.wt.sal
+## mtxPath: path to the directory storing 10x mtx data
+## condname: name of this condition, e.g. 'WT.SAL'
+## files: Lookup table for filename and sampleID
 myCondSeurat <- function(filenames, mtxPath, condName, files){
   print('~*~')
   print(paste0('Working on ', condName))
@@ -77,32 +83,39 @@ myCondSeurat <- function(filenames, mtxPath, condName, files){
   print(paste0('Making initial Seurat object with ', filenames[1], '...'))
   initialData <- Read10X(data.dir = paste0(mtxPath, '/', filenames[1], '/mm10/') )
   data <- CreateSeuratObject(raw.data = initialData, project = condName, min.cells = 3, min.features=200, names.field = files_relevant[1,2])
-  #data <- MakeSparse(object = data) # make it sparse !!!!! NEW ADDITION FOR THIS RUN 2.19
-  
-  # # Are there any cells that didn't get categorized? Default to calling them 'Unknown sample' (think filtered out later)
-  # # (otherwise find and troubleshoot using which(!(row.names(data@meta.data) %in% allNewID_cells$Barcode)))
-  # data@meta.data$tst <- 'Unknown'
-  # data@meta.data[ which(row.names(data@meta.data) %in% allNewID_cells$Barcode), 'tst'] <- as.character(allNewID_cells[ which(row.names(data@meta.data) %in% allNewID_cells$Barcode) , 'sample'])
-  # Add sample IDs
+
+  ## Add sample IDs
   data@meta.data$orig.ident <- files_relevant[1,'ids'] 
+
+  # merge with the second
+  # make this iteration's seurat object
+  print(paste0('Reading in data from ',mtxPath, '/', filenames[2],'...'))
+  secondData <- Read10X(data.dir = paste0(mtxPath, '/', filenames[2], '/mm10/') )
+  secondData_obj <- CreateSeuratObject(raw.data = secondData, project = condName, min.cells = 3, min.features=200, names.field = files_relevant[2,2]) # create object
+  secondData_obj@meta.data$orig.ident <- files_relevant[i,'ids']
+  
+  # merge this new seurat object with existing data
+  print(paste0('Merging Seurat data with data from ', filenames[2], '...'))
+  data <- MergeSeurat(data, secondData_obj, project = condName, 
+                      add.cell.id1 = files_relevant[1,2], 
+                      add.cell.id2 = files_relevant[2,2])
   
   # now merge with the others
-  for (i in 2:length(filenames)){
+  for (i in 3:length(filenames)){
     
     # make this iteration's seurat object
-    addingData <- Read10X(data.dir = paste0(mtxPath, '/', filenames[i], '/mm10/') )
     print(paste0('Reading in data from ',mtxPath, '/', filenames[i],'...'))
-    addingData_obj <- CreateSeuratObject(raw.data = addingData, project = condName, min.cells = 3, min.features=200) # create object
-    addingData_obj <- MakeSparse(object = addingData_obj) # make it sparse !!! NEW ADDITION FOR THIS RUN 2.19
+    addingData <- Read10X(data.dir = paste0(mtxPath, '/', filenames[i], '/mm10/') )
+    addingData_obj <- CreateSeuratObject(raw.data = addingData, project = condName, min.cells = 3, min.features=200, names.field = files_relevant[i,2]) # create object
     addingData_obj@meta.data$orig.ident <- files_relevant[i,'ids']
     
     # merge this new seurat object with existing data
     print(paste0('Merging Seurat data with data from ', filenames[i], '...'))
-    data <- MergeSeurat(data,addingData_obj, project = condName, add.cell.id2 = filenames[i])
+    data <- MergeSeurat(data,addingData_obj, project = condName, add.cell.id2 = files_relevant[i,2])
   }
   
   # give everything in this Seurat Object a condition name
-  data@meta.data$stim <- condName
+  data@meta.data$cond <- condName
   
   # prefilter now that all the samples are in
   data <- FilterCells(data, subset.names = "nGene", low.thresholds = 200, high.thresholds = Inf)
@@ -111,7 +124,7 @@ myCondSeurat <- function(filenames, mtxPath, condName, files){
   
   # give everything an alternative ID
   data@meta.data$trueBarcode <- sapply(strsplit(row.names(data@meta.data ), split="_"),tail, n=1L)
-  data@meta.data$demuxSample <- allNewID_cells[ match(data@meta.data$trueBarcode,allNewID_cells$Barcode ) , 'sample']
+  data@meta.data$sample <- altID_cells[ match(data@meta.data$trueBarcode,altID_cells$Barcode ) , 'sample']
   
   return(data)
 }
@@ -133,3 +146,19 @@ setwd(paste0(outputDir, subDir))
 save.image(file = paste0("allVars.RData"))
 
 print('~*~ All done! ~*~')
+
+## BONUS ## MAKING NEW CSV FOR POOLED RUNTHRU
+
+tst<- data.frame(Barcode = as.character(row.names(wt.sal@meta.data)), 
+                 sample = wt.sal@meta.data$orig.ident)
+tst[, ] <- lapply(tst[, ], as.character)
+tst2<- data.frame(Barcode = row.names(wt.lps@meta.data), sample = wt.lps@meta.data$orig.ident)
+tst2[, ] <- lapply(tst2[, ], as.character)
+tst3<- data.frame(Barcode = row.names(het.sal@meta.data), sample = het.sal@meta.data$orig.ident)
+tst3[, ] <- lapply(tst3[, ], as.character)
+tst4<- data.frame(Barcode = row.names(het.lps@meta.data), sample = het.lps@meta.data$orig.ident)
+tst4[, ] <- lapply(tst4[, ], as.character)
+
+originalSampleBarcodeLUT <- rbind(tst,tst2,tst3,tst4)
+setwd('/labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/metadata/')
+write.csv(originalSampleBarcodeLUT, file = 'originalSampleBarcodeLUT.csv', quote=FALSE, row.names=FALSE)
