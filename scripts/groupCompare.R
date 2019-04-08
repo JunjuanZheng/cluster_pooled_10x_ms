@@ -64,15 +64,15 @@ print(subSubDir)
 print(file.path(outputDir, subDir, subSubDir))
 
 if (file.exists(subSubDir)){
-    setwd(file.path(outputDir, subDir, subSubDir))
+  setwd(file.path(outputDir, subDir, subSubDir))
 } else {
-    dir.create(file.path(outputDir, subDir, subSubDir))
-    setwd(file.path(outputDir, subDir, subSubDir))
+  dir.create(file.path(outputDir, subDir, subSubDir))
+  setwd(file.path(outputDir, subDir, subSubDir))
 }
 
 ## create new group in metadata for both cell type AND cond info
 data.combined@meta.data$celltype.cond <- paste0(data.combined@ident, "_",
-    data.combined@meta.data$cond)
+                                                data.combined@meta.data$cond)
 
 ## stash those labels for later use
 data.combined <- StashIdent(data.combined, save.name = "celltype")
@@ -80,21 +80,21 @@ data.combined <- SetAllIdent(data.combined, id = "celltype.cond") # tell Seurat 
 
 ## DE between two groups
 deGroups <- function(data.combined, xAxis, yAxis){
-    # create title
-    myTitle <- paste0(xAxis, '_vs_', yAxis)
-    print(paste0('DE genes for ', myTitle, '...'))
-
-    # do DE
-    ident1_xAxis_yAxis <- FindMarkers(data.combined, ident.1 = xAxis, ident.2 = yAxis, print.bar = TRUE)
-    head(ident1_xAxis_yAxis, 15)
-
-    ident1_xAxis_yAxis
-
-    # save results
-    write.csv(ident1_xAxis_yAxis, file = paste0(myTitle, '_r', chosen_res, '_cc', chosen_cc, '.csv'), quote=FALSE)
-
-    # return DE lists
-    return(ident1_xAxis_yAxis)
+  # create title
+  myTitle <- paste0(xAxis, '_vs_', yAxis)
+  print(paste0('DE genes for ', myTitle, '...'))
+  
+  # do DE
+  ident1_xAxis_yAxis <- FindMarkers(data.combined, ident.1 = xAxis, ident.2 = yAxis, print.bar = TRUE)
+  head(ident1_xAxis_yAxis, 15)
+  
+  ident1_xAxis_yAxis
+  
+  # save results
+  write.csv(ident1_xAxis_yAxis, file = paste0(myTitle, '_r', chosen_res, '_cc', chosen_cc, '.csv'), quote=FALSE)
+  
+  # return DE lists
+  return(ident1_xAxis_yAxis)
 }
 
 ## effect of LPS
@@ -153,10 +153,10 @@ print(subSubDir)
 print(file.path(outputDir, subDir, subSubDir))
 
 if (file.exists(subSubDir)){
-    setwd(file.path(outputDir, subDir, subSubDir))
+  setwd(file.path(outputDir, subDir, subSubDir))
 } else {
-    dir.create(file.path(outputDir, subDir, subSubDir))
-    setwd(file.path(outputDir, subDir, subSubDir))
+  dir.create(file.path(outputDir, subDir, subSubDir))
+  setwd(file.path(outputDir, subDir, subSubDir))
 }
 
 ## Function
@@ -164,31 +164,31 @@ plotOneGroup <- function(data.combined, ident1, xAxis, yAxis, genesToLabel){
   # name for this run
   myTitle <- paste0(xAxis, '_vs_', yAxis, '_grp', ident1)
   print(paste0('Plotting genes for ', myTitle, '...'))
-
+  
   # get plotting data for first
   cells1 <- SubsetData(data.combined, ident.use = ident1, subset.raw = T)
   cells1 <- SetAllIdent(cells1, id = "cond")
   avg.cells1 <- log1p(AverageExpression(cells1, show.progress = FALSE))
   avg.cells1$gene <- rownames(avg.cells1)
-
+  
   # clarify what genes to plot
   avg.cells1$plotGene <- "" # effectively hiding all labels
   avg.cells1[genesToLabel, 'plotGene'] <- rownames(avg.cells1[genesToLabel,])
-
+  
   # plot
   library(ggrepel)
   p1 <- ggplot(avg.cells1, aes_string(x = xAxis, y = yAxis, label = 'plotGene')) + geom_point() + ggtitle(ident1) + geom_text_repel()
-
+  
   ggsave(file = paste0(myTitle, '_r', chosen_res, '_cc', chosen_cc, '.pdf'), plot = p1, device='pdf')
-
+  
   # what genes have a large difference in expression?
   bigDiff <- data.frame(abs(avg.cells1[, xAxis] - avg.cells1[, yAxis]))
   row.names(bigDiff) <- row.names(avg.cells1)
   # write data to file
   write.csv(bigDiff, file = paste0(myTitle, '_r', chosen_res, '_cc', chosen_cc, '.csv'), quote=FALSE)
-
+  
   return(bigDiff)
-
+  
 }
 
 ## Effect of LPS
@@ -369,7 +369,3 @@ print('~*~')
 
 print('~*~ All done! ~*~')
 print(paste0('System time: ', Sys.time()))
-
-
-
-

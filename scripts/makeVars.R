@@ -1,3 +1,4 @@
+# makeVars.R
 # Kristin Muench
 # 2019.03.26
 # Pipeline to run Seurat setup for mouse scRNA-Seq data with CCA
@@ -13,8 +14,6 @@ packageVersion('Seurat')
 
 # !!!!! FIX THIS TO ACCOUNT FOR MULTI GROUP BARCODES
 ## Load cell IDs for demultiplexing samples
-#altID_cells <- read.csv("/scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/20190226_sexLabel/allNewID_cells.csv")
-altID_cells <- read.csv("/labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/metadata/originalSampleBarcodeLUT.csv")
 
 # import from command line
 args <- commandArgs(TRUE)
@@ -22,16 +21,23 @@ args <- commandArgs(TRUE)
 mtxPath <- args[1]
 metadataPath <- args[2]
 outputDir <- args[3]
+altID_cells_path <- args[4]
 
 # # !!! FOR TROUBLESHOOTING - UNCOMMENT FOR PATHS
 # mtxPath <- '/labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData'
 # metadataPath <- '/labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/metadata/20190211_sampleTable.csv'
 # outputDir <- '/scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190228_runThroughDemultiplex/'
+#altID_cells <- read.csv("/scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/20190226_sexLabel/allNewID_cells.csv")
+#altID_cells <- read.csv("/labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/metadata/originalSampleBarcodeLUT.csv")
 
 print('Run CCA Track: cca_makeVars.R')
 print(paste0('Mtx File location: ', mtxPath))
 print(paste0('Metadata location: ', metadataPath))
 print(paste0('Output location: ', outputDir))
+print(paste0('Alternative Cell IDs location: ', altID_cells_path))
+
+# load cell name IDs (pooled or demultiplexed)
+altID_cells <- read.csv(altID_cells_path)
 
 # make subdirectory
 setwd(outputDir)
@@ -92,7 +98,7 @@ myCondSeurat <- function(filenames, mtxPath, condName, files){
   print(paste0('Reading in data from ',mtxPath, '/', filenames[2],'...'))
   secondData <- Read10X(data.dir = paste0(mtxPath, '/', filenames[2], '/mm10/') )
   secondData_obj <- CreateSeuratObject(raw.data = secondData, project = condName, min.cells = 3, min.features=200, names.field = files_relevant[2,2]) # create object
-  secondData_obj@meta.data$orig.ident <- files_relevant[i,'ids']
+  secondData_obj@meta.data$orig.ident <- files_relevant[2,'ids']
   
   # merge this new seurat object with existing data
   print(paste0('Merging Seurat data with data from ', filenames[2], '...'))
@@ -124,7 +130,7 @@ myCondSeurat <- function(filenames, mtxPath, condName, files){
   
   # give everything an alternative ID
   data@meta.data$trueBarcode <- sapply(strsplit(row.names(data@meta.data ), split="_"),tail, n=1L)
-  data@meta.data$sample <- altID_cells[ match(data@meta.data$trueBarcode,altID_cells$Barcode ) , 'sample']
+  data@meta.data$sample <- altID_cells[ match( row.names(data@meta.data), altID_cells$Barcode ) , 'sample']
   
   return(data)
 }
@@ -142,23 +148,27 @@ table(het.sal@meta.data$orig.ident)
 table(het.lps@meta.data$orig.ident)
 
 # save variables
-setwd(paste0(outputDir, subDir))
+setwd(file.path(outputDir, subDir))
 save.image(file = paste0("allVars.RData"))
+save(wt.sal, file = 'seuratObj_wt.sal.RData')
+save(wt.lps, file = 'seuratObj_wt.lps.RData')
+save(het.sal, file = 'seuratObj_het.sal.RData')
+save(het.lps, file = 'seuratObj_het.lps.RData')
 
 print('~*~ All done! ~*~')
 
-## BONUS ## MAKING NEW CSV FOR POOLED RUNTHRU
-
-tst<- data.frame(Barcode = as.character(row.names(wt.sal@meta.data)), 
-                 sample = wt.sal@meta.data$orig.ident)
-tst[, ] <- lapply(tst[, ], as.character)
-tst2<- data.frame(Barcode = row.names(wt.lps@meta.data), sample = wt.lps@meta.data$orig.ident)
-tst2[, ] <- lapply(tst2[, ], as.character)
-tst3<- data.frame(Barcode = row.names(het.sal@meta.data), sample = het.sal@meta.data$orig.ident)
-tst3[, ] <- lapply(tst3[, ], as.character)
-tst4<- data.frame(Barcode = row.names(het.lps@meta.data), sample = het.lps@meta.data$orig.ident)
-tst4[, ] <- lapply(tst4[, ], as.character)
-
-originalSampleBarcodeLUT <- rbind(tst,tst2,tst3,tst4)
-setwd('/labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/metadata/')
-write.csv(originalSampleBarcodeLUT, file = 'originalSampleBarcodeLUT.csv', quote=FALSE, row.names=FALSE)
+# ## BONUS ## MAKING NEW CSV FOR POOLED RUNTHRU
+# 
+# tst<- data.frame(Barcode = as.character(row.names(wt.sal@meta.data)), 
+#                  sample = wt.sal@meta.data$orig.ident)
+# tst[, ] <- lapply(tst[, ], as.character)
+# tst2<- data.frame(Barcode = row.names(wt.lps@meta.data), sample = wt.lps@meta.data$orig.ident)
+# tst2[, ] <- lapply(tst2[, ], as.character)
+# tst3<- data.frame(Barcode = row.names(het.sal@meta.data), sample = het.sal@meta.data$orig.ident)
+# tst3[, ] <- lapply(tst3[, ], as.character)
+# tst4<- data.frame(Barcode = row.names(het.lps@meta.data), sample = het.lps@meta.data$orig.ident)
+# tst4[, ] <- lapply(tst4[, ], as.character)
+# 
+# originalSampleBarcodeLUT <- rbind(tst,tst2,tst3,tst4)
+# setwd('/labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/metadata/')
+# write.csv(originalSampleBarcodeLUT, file = 'originalSampleBarcodeLUT.csv', quote=FALSE, row.names=FALSE)

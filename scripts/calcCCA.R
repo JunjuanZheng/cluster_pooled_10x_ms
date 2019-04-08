@@ -186,6 +186,7 @@ makeBicorPlot(data.combined, "Condition", numCCs)
 makeBicorPlot(data.combined, "Genotype", numCCs)
 
 ## heatmap to assess which components are actually important?
+print('Heatmap to demonstrate which components are actually important...')
 pdf(file = 'dimHeatmap_1_9.pdf')
 DimHeatmap(object = data.combined, reduction.type = "cca", cells.use = 500, dim.use = 1:9, do.balanced = TRUE)
 dev.off()

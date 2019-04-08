@@ -137,5 +137,21 @@ plot_cell_clusters(cds.wt.sal, 1, 2, color = "cond") + facet_wrap(~orig.ident)
 
 
 # Pseudotime trajectories
+## Step 1. identify "interesting" genes to use
+###DE genes from those at beginning and those at end
+diff_test_res <- differentialGeneTest(cds.wt.sal[expressed_genes,],
+                                      fullModelFormulaStr = "~cond")
+ordering_genes <- row.names (subset(diff_test_res, qval < 0.01))
+
+### cells moving asynchronously through biological process
+cds.wt.sal <- setOrderingFilter(cds.wt.sal, ordering_genes)
+plot_ordering_genes(cds.wt.sal)
+
+## Step 2. Reduce dimensionality
+HSMM_myo <- reduceDimension(HSMM_myo, max_components = 2, method = 'DDRTree')
+
+## Step 3. Visualize trajectory in reduced dimensional space
+HSMM_myo <- orderCells(HSMM_myo)
+
 
 

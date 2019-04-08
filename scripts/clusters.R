@@ -49,6 +49,10 @@ if (file.exists(subDir)){
 
 setwd(file.path(outputDir, subDir))
 
+# add sex labels if they aren't there
+data.combined@meta.data$sex <- sapply(strsplit(as.character(data.combined@meta.data$sample),'_'), "[", 2)
+head(data.combined@meta.data)
+class(data.combined@meta.data$sex)
 
 # Align CCA subspaces
 print('~*~')
