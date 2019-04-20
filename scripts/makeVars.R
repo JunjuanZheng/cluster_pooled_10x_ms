@@ -124,7 +124,7 @@ myCondSeurat <- function(filenames, mtxPath, condName, files){
   data@meta.data$cond <- condName
   
   ## ** SUBCLUSTERING ** subset data according to subclustering - ONLY 13/25
-  data <- SubsetData(data, cells.use = row.names( subclust_IDs[ which(subclust_IDs$res.1.2 %in% c('13', '25')) ,] ))
+  data <- SubsetData(data, cells.use = row.names( subclust_IDs[ which(subclust_IDs$res.1.2 %in% c('19')) ,] ))
   
   # prefilter now that all the samples are in
   data <- FilterCells(data, subset.names = "nGene", low.thresholds = 200, high.thresholds = Inf)
