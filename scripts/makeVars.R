@@ -12,8 +12,6 @@ packageVersion('Seurat')
 ## run this in case you accidentally load Seurat 3
 #detach("package:Seurat", unload=TRUE)
 
-# !!!!! FIX THIS TO ACCOUNT FOR MULTI GROUP BARCODES
-## Load cell IDs for demultiplexing samples
 
 # import from command line
 args <- commandArgs(TRUE)
@@ -27,7 +25,7 @@ altID_cells_path <- args[4]
 # mtxPath <- '/labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/mtxData'
 # metadataPath <- '/labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/metadata/20190211_sampleTable.csv'
 # outputDir <- '/scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190228_runThroughDemultiplex/'
-#altID_cells <- read.csv("/scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/20190226_sexLabel/allNewID_cells.csv")
+#altID_cells_path <- read.csv("/scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190219_makeSparse/20190226_sexLabel/allNewID_cells.csv")
 #altID_cells <- read.csv("/labs/tpalmer/projects/cnv16p/data/scRNASeq/mouse/metadata/originalSampleBarcodeLUT.csv")
 
 print('Run CCA Track: cca_makeVars.R')
@@ -69,6 +67,8 @@ list.filenames.wt.lps <- files[files$ids %in% metadata[metadata$Group == 'WT.LPS
 list.filenames.het.sal <- files[files$ids %in% metadata[metadata$Group == 'HET.SAL','SampleID'], 'filenames']
 list.filenames.het.lps <- files[files$ids %in% metadata[metadata$Group == 'HET.LPS','SampleID'], 'filenames']
 
+# load subclustering IDs
+load('/scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190329_troubleshootRunthrough_demux/groupCompare/subclust_IDs.RData') # interneurons and dienceph
 
 # Create Seurat object for each condition
 ## First sample imported to start the Seurat object
@@ -92,7 +92,7 @@ myCondSeurat <- function(filenames, mtxPath, condName, files){
 
   ## Add sample IDs
   data@meta.data$orig.ident <- files_relevant[1,'ids'] 
-
+  
   # merge with the second
   # make this iteration's seurat object
   print(paste0('Reading in data from ',mtxPath, '/', filenames[2],'...'))
@@ -122,6 +122,9 @@ myCondSeurat <- function(filenames, mtxPath, condName, files){
   
   # give everything in this Seurat Object a condition name
   data@meta.data$cond <- condName
+  
+  ## ** SUBCLUSTERING ** subset data according to subclustering - ONLY 13/25
+  data <- SubsetData(data, cells.use = row.names( subclust_IDs[ which(subclust_IDs$res.1.2 %in% c('13', '25')) ,] ))
   
   # prefilter now that all the samples are in
   data <- FilterCells(data, subset.names = "nGene", low.thresholds = 200, high.thresholds = Inf)

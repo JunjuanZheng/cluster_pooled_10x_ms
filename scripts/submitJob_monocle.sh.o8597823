@@ -1,0 +1,8 @@
+Running monocle:
+        gene_short_name use_for_ordering num_cells_expressed
+Xkr4               Xkr4            FALSE                  66
+Sox17             Sox17            FALSE                 110
+Mrpl15           Mrpl15            FALSE               13588
+Lypla1           Lypla1            FALSE                6321
+Gm37988         Gm37988            FALSE                   8
+Tcea1             Tcea1            FALSE               11175

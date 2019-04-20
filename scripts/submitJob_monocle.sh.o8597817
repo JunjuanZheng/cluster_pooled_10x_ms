@@ -1,0 +1,12 @@
+Making useful visualizations...
+Importing this RData file with data and clusters:
+[1] "Run CCA Track: groupCompare.R"
+[1] "Setting up workspace..."
+[1] ‘2.3.4’
+[1] "Importing files from: /scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190329_troubleshootRunthrough_demux/clusters/data.combined_withClust_r1.2_CC40.RData"
+[1] "Output location: /scratch/users/kmuench/output/cnv16p/201901_cluster_pooled_10x_ms/20190329_troubleshootRunthrough_demux"
+[1] "Chosen # of CCs: 40"
+[1] "Chosen resolution: 1.2"
+[1] "~*~"
+[1] "Loading needed files..."
+[1] "Name of Experiment: groupCompare"

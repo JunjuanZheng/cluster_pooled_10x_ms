@@ -8,6 +8,9 @@
 library('Seurat', lib.loc='/scg/apps/software/r/3.5.0/scg/seurat_2.3')
 packageVersion('Seurat')
 
+## run this in case you accidentally load Seurat 3
+#detach("package:Seurat", unload=TRUE)
+
 # # Set up workspace - uncomment for running job
 # print('Run CCA Track: groupCompare.R')
 # print('Setting up workspace...')
@@ -295,9 +298,8 @@ FeatureHeatmap(data.combined, features.plot = c('Olig3', 'Pax6', 'Rara', 'Tcf4',
 FeatureHeatmap(data.combined, features.plot = c('Fgf8', 'Foxa1', 'Gbx2'), group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
 FeatureHeatmap(data.combined, features.plot = c('Lhx5', 'Olig2', 'Six3', 'Tle4'), group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
 
-               
-               # other int
-               FeatureHeatmap(data.combined, features.plot = 'Wnt8b', group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
+# other int
+FeatureHeatmap(data.combined, features.plot = 'Wnt8b', group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
                FeatureHeatmap(data.combined, features.plot = 'Wnt7a', group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
                FeatureHeatmap(data.combined, features.plot = 'Wnt5a', group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
                FeatureHeatmap(data.combined, features.plot = 'Wnt3a', group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
@@ -344,18 +346,76 @@ FeatureHeatmap(data.combined, features.plot = c('Lhx5', 'Olig2', 'Six3', 'Tle4')
                FeatureHeatmap(data.combined, features.plot = 'Shh', group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
                FeatureHeatmap(data.combined, features.plot = 'Sox14', group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
                
-               
-               # plot individual genes
-               ## function to plot individual genes w/violin plot
-               plotVlnPlot <- function(data.combined, plotGene, myGroup, myTitle, chosen_res, chosen_cc){
-                 # plot
-                 p <- VlnPlot(object = data.combined, features.plot = plotGene, group.by = myGroup, 
-                              do.return = TRUE)
-                 
-                 # save
-                 ggsave(file = paste0(myTitle, '_', myGroup, '_', plotGene, '_r', chosen_res, '_cc', chosen_cc, '.pdf'), plot = p, device='pdf')
-               }
-               
+# Visualization of other things that will help me understand Otx2+ cultures 
+## Clusters 23/26
+### From hem
+FeatureHeatmap(data.combined, features.plot = c('Bmp7', 'Rspo1', 'Wnt8b', 'Wnt3a'), group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
+FeatureHeatmap(data.combined, features.plot = c('Dkk3', 'Sostdc1'), group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
+
+### Theory I: Hem + Choroid Plexus 
+#### C23
+FeatureHeatmap(data.combined, features.plot = c('Otx2', 'Msx1', 'Hes1'), group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
+FeatureHeatmap(data.combined, features.plot = c('Hes5', 'Lhx2',  'Foxg1'), group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
+#### C26
+FeatureHeatmap(data.combined, features.plot = c('Otx2', 'Folr1', 'Foxj1','Kcne2'), group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
+FeatureHeatmap(data.combined, features.plot = c('Lhx2', 'Emx1', 'Emx2'), group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
+
+### THeory II: Midbrain dopaminergic cells
+FeatureHeatmap(data.combined, features.plot = c('Lmx1a', 'Calml4', 'Folr1', 'Plxdc2'), group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
+
+### Theory III: Some kind of interneuron
+FeatureHeatmap(data.combined, features.plot = c('Sulf1', 'Clic6', 'Hes1'), group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
+
+### Important in cilia
+FeatureHeatmap(data.combined, features.plot = c('Rsph1', 'Foxj1', 'Hes1'), group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
+
+## Cluster 8: radial glia markers
+FeatureHeatmap(data.combined, features.plot = c('Fabp7', 'Ddah1', 'Slc1a3', 'Pea15a', 'Dbi'), group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
+
+## Cluster 16: neuron markers
+FeatureHeatmap(data.combined, features.plot = c('Trp73', 'Calb2', 'Stmn2', 'Meg3', 'Gap43'), group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
+FeatureHeatmap(data.combined, features.plot = c('Ebf1', 'Mapt', 'Islr2', 'Tbr1'), group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
+
+
+
+# Visualization of things relevant to the Cluster 13/GABA story
+FeatureHeatmap(data.combined, features.plot = c('Gad1', 'Gad2', 'Nkx2-1'), group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
+FeatureHeatmap(data.combined, features.plot = c('Ndn', 'Zfp503', 'Dlx2', 'Ebf1', 'Zeb2', 'Maz'), group.by = 'cond', pt.size = 0.25, key.position = "top", max.exp = 3)
+
+## accompanying violin Plot
+data.combined@meta.data$cond_clust <- paste0(data.combined@meta.data$cond, '_', data.combined@meta.data$res.1.2)
+
+data.combined <- SetAllIdent(data.combined, "res.1.2")
+data.combined_c13 <- SubsetData(data.combined, ident.use = '13')
+VlnPlot(object = data.combined_c13, features.plot = c('Ebf1', 'Dlx2'), group.by = 'cond')
+
+data.combined_c13 <- SetAllIdent(data.combined_c13, "cond")
+data.combined_c13_justHet <- SubsetData(data.combined_c13, ident.use = c('WT.SAL', 'HET.SAL') )
+VlnPlot(object = data.combined_c13_justHet, features.plot = c('Ebf1', 'Egr1', 'Zfp503', 'Ndn'), group.by = 'cond', nCol=2)
+VlnPlot(object = data.combined_c13_justHet, features.plot = c('Maz', 'Aldoa', 'Dlx2', 'Ypel3'), group.by = 'cond', nCol=2)
+
+## Dlx2 looks weird. What if we could cells with expression above threshold...?
+data.combined_c13_normExprs <- FetchData(data.combined_c13, vars.all = c('Ebf1', 'Egr1', 'Zfp503', 'Ndn',
+                                                                         'Maz', 'Aldoa', 'Dlx2', 'Ypel3'), 
+                                                 use.raw=FALSE)
+data.combined_c13_normExprs <- merge(data.combined_c13_normExprs, data.combined_c13@meta.data, by = 'row.names')
+
+library(dplyr)
+data.combined_c13_normExprs$Dlx2AboveThresh <- data.combined_c13_normExprs$Dlx2 > 0
+tally_dlx <- as.tbl(data.frame(data.combined_c13_normExprs)) %>% group_by(Dlx2AboveThresh, cond) %>% tally()
+mean_dlx <- as.tbl(data.frame(data.combined_c13_normExprs)) %>% group_by(cond) %>% dplyr::summarize(Mean = mean(Dlx2, na.rm=TRUE), SD = sd(Dlx2, na.rm=TRUE))
+
+
+# plot individual genes and save
+## function to plot individual genes w/violin plot
+plotVlnPlot <- function(data.combined, plotGene, myGroup, myTitle, chosen_res, chosen_cc){
+  # plot
+  p <- VlnPlot(object = data.combined, features.plot = plotGene, group.by = myGroup, 
+               do.return = TRUE)
+  # save
+  ggsave(file = paste0(myTitle, '_', myGroup, '_', plotGene, '_r', chosen_res, '_cc', chosen_cc, '.pdf'), plot = p, device='pdf')
+  }
+              
                ## deploy violin plot
                plotVlnPlot(data.combined, 'Hbb-y', 'cond', 'plotVlnPlot', chosen_res, chosen_cc)
                plotVlnPlot(data.combined, 'Hbb-y', 'sample', 'plotVlnPlot', chosen_res, chosen_cc)
